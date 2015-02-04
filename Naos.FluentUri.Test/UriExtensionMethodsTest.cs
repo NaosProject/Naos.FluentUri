@@ -120,7 +120,7 @@ namespace Naos.FluentUri.Test
         public static void CallWithTimeout_ShortTimeout_ExceptionThrown()
         {
             // arrange
-            var timeout = TimeSpan.FromMilliseconds(4); // using this crazy short timeout to guarantee a failure. 
+            var timeout = TimeSpan.FromTicks(1); // using this crazy short timeout to guarantee a failure. 
             var url = "http://httpbin.org/ip";
 
             // act
