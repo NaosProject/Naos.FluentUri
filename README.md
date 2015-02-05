@@ -26,7 +26,7 @@ This library is concerned with the standard calls to RESTful services from a .NE
  - Add a cookie to the request:
     - `// Cookie can also be of type HttpCookie...`
     - `var cookie = new Cookie(".ASPXAUTH", "[AuthCookieValue]") { Expires = DateTime.Now.AddDays(30) };`
-    - `var obj = new Uri("http://api/Objects/42").Get().WithCookie(new Cookie()).Call<MyObject>();`
+    - `var obj = new Uri("http://api/Objects/42").Get().WithCookie(cookie).Call<MyObject>();`
  - Add headers to the request:
     - `// Headers can also be of type WebHeaderCollection or NameValueCollection..`
     - `var headers = new[] { new KeyValuePair<string, string>("Auth-Token", "[AuthTokenValue]") };`
