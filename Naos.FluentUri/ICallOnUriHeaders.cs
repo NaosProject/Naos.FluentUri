@@ -6,6 +6,7 @@
 
 namespace Naos.FluentUri
 {
+    using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Net;
 
@@ -27,5 +28,12 @@ namespace Naos.FluentUri
         /// <param name="headers">Headers to add to call.</param>
         /// <returns>Updated fluent grammar chain.</returns>
         ICallOnUriAll WithHeaders(WebHeaderCollection headers);
+
+        /// <summary>
+        /// Adds headers from a KeyValuePair string,string[] to the call.
+        /// </summary>
+        /// <param name="headers">Headers to add to call.</param>
+        /// <returns>Updated fluent grammar chain.</returns>
+        ICallOnUriAll WithHeaders(KeyValuePair<string, string>[] headers);
     }
 }

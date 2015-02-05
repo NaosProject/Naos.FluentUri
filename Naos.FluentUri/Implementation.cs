@@ -29,6 +29,8 @@ namespace Naos.FluentUri
 
         private object body;
 
+        private Action<KeyValuePair<string, string>[]> saveResponseHeadersAction;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Implementation"/> class.
         /// </summary>
@@ -69,6 +71,15 @@ namespace Naos.FluentUri
         }
 
         /// <inheritdoc />
+        public ICallOnUriAll WithHeaders(KeyValuePair<string, string>[] headers)
+        {
+            this.UpdateCallListThrowIfAlreadyCalled("WithHeaders");
+
+            this.headerJar = new HeaderJar(headers);
+            return this;
+        }
+
+        /// <inheritdoc />
         public ICallOnUriAll WithCookie(Cookie cookie)
         {
             this.UpdateCallListThrowIfAlreadyCalled("WithCookie");
@@ -96,27 +107,40 @@ namespace Naos.FluentUri
         }
 
         /// <inheritdoc />
-        public void Execute()
+        public ICallOnUriAll WithResponseHeaderSaveAction(Action<KeyValuePair<string, string>[]> saveAction)
+        {
+            this.UpdateCallListThrowIfAlreadyCalled("WithResponseHeaderSaveAction");
+
+            this.saveResponseHeadersAction = saveAction;
+            return this;
+        }
+
+        /// <inheritdoc />
+        public void Call()
         {
             Operator.Call<VoidResultType>(
                 this.uri,
                 this.httpVerb,
                 this.body,
-                this.headerJar.Headers,
                 this.cookieJar,
+                this.headerJar.Headers,
+                this.saveResponseHeadersAction,
+                Enums.ContentType.ApplicationJson,
                 Enums.ContentType.ApplicationJson,
                 this.timeout);
         }
 
         /// <inheritdoc />
-        public TResult ExecuteForResult<TResult>() where TResult : class
+        public TResult Call<TResult>()
         {
             return Operator.Call<TResult>(
                 this.uri,
                 this.httpVerb,
                 this.body,
-                this.headerJar.Headers,
                 this.cookieJar,
+                this.headerJar.Headers,
+                this.saveResponseHeadersAction,
+                Enums.ContentType.ApplicationJson,
                 Enums.ContentType.ApplicationJson,
                 this.timeout);
         }

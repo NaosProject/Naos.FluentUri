@@ -51,7 +51,8 @@
     <Compile Include="DuplicateCallUsingFluentGrammarException.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ICallOnUriBody.cs" />
-    <Compile Include="ICallOnUriExecute.cs" />
+    <Compile Include="ICallOnUriResponseHeaderSaveAction.cs" />
+    <Compile Include="ICallOnUriCall.cs" />
     <Compile Include="ICallOnUriTimeout.cs" />
     <Compile Include="Implementation.cs" />
     <Compile Include="CookieConvertionExtensionMethods.cs" />

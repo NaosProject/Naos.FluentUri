@@ -34,7 +34,7 @@ namespace Naos.FluentUri.Test
             var expectedCookieValue = cookie.Value;
 
             // act
-            var result = new Uri(url).Get().WithCookie(cookie).ExecuteForResult<Dictionary<string, Dictionary<string, string>>>();
+            var result = new Uri(url).Get().WithCookie(cookie).Call<Dictionary<string, Dictionary<string, string>>>();
             var headersDictionary = result["headers"];
             var actualCookieValue = headersDictionary["Cookie"];
 
@@ -61,7 +61,7 @@ namespace Naos.FluentUri.Test
             var expectedCookieValue = cookie.Value;
 
             // act
-            var result = new Uri(url).Get().WithCookie(cookie).ExecuteForResult<Dictionary<string, Dictionary<string, string>>>();
+            var result = new Uri(url).Get().WithCookie(cookie).Call<Dictionary<string, Dictionary<string, string>>>();
             var headersDictionary = result["headers"];
             var actualCookieValue = headersDictionary["Cookie"];
 
@@ -83,7 +83,7 @@ namespace Naos.FluentUri.Test
             headers.Add(ourHeaderName, expectedValue);
 
             // act
-            var result = new Uri(url).Get().WithHeaders(headers).ExecuteForResult<Dictionary<string, Dictionary<string, string>>>();
+            var result = new Uri(url).Get().WithHeaders(headers).Call<Dictionary<string, Dictionary<string, string>>>();
             var headersDictionary = result["headers"];
             var actualValue = headersDictionary[ourHeaderName];
 
@@ -105,7 +105,29 @@ namespace Naos.FluentUri.Test
             headers.Add(ourHeaderName, expectedValue);
 
             // act
-            var result = new Uri(url).Get().WithHeaders(headers).ExecuteForResult<Dictionary<string, Dictionary<string, string>>>();
+            var result = new Uri(url).Get().WithHeaders(headers).Call<Dictionary<string, Dictionary<string, string>>>();
+            var headersDictionary = result["headers"];
+            var actualValue = headersDictionary[ourHeaderName];
+
+            // assert
+            Assert.NotNull(headersDictionary);
+            Assert.NotNull(actualValue);
+            Assert.Equal(expectedValue, actualValue);
+        }
+
+        [Fact]
+        // ReSharper disable once InconsistentNaming
+        public static void CallWithHeaders_KeyValuePairArray_HeadersAreSent()
+        {
+            // arrange
+            var url = "http://httpbin.org/headers";
+            var headers = new List<KeyValuePair<string, string>>();
+            var ourHeaderName = "Headername";
+            var expectedValue = "headerValue";
+            headers.Add(new KeyValuePair<string, string>(ourHeaderName, expectedValue));
+
+            // act
+            var result = new Uri(url).Get().WithHeaders(headers.ToArray()).Call<Dictionary<string, Dictionary<string, string>>>();
             var headersDictionary = result["headers"];
             var actualValue = headersDictionary[ourHeaderName];
 
@@ -126,7 +148,7 @@ namespace Naos.FluentUri.Test
             // act
             try
             {
-                new Uri(url).Get().WithTimeout(timeout).ExecuteForResult<IDictionary<string, string>>();
+                new Uri(url).Get().WithTimeout(timeout).Call<IDictionary<string, string>>();
                 Assert.True(false, "Should not have reached here.");
             }
             catch (WebException ex)
@@ -145,7 +167,7 @@ namespace Naos.FluentUri.Test
             var expectedKey = "origin";
 
             // act
-            var result = new Uri(url).Get().ExecuteForResult<IDictionary<string, string>>();
+            var result = new Uri(url).Get().Call<IDictionary<string, string>>();
 
             // assert
             Assert.NotNull(result);
@@ -163,7 +185,7 @@ namespace Naos.FluentUri.Test
             var body = new KeyValuePair<string, string>("BodyName", "BodyValue");
 
             // act
-            var result = new Uri(url).Post().WithBody(body).ExecuteForResult<dynamic>();
+            var result = new Uri(url).Post().WithBody(body).Call<dynamic>();
 
             // assert
             Assert.NotNull(result);
@@ -180,7 +202,7 @@ namespace Naos.FluentUri.Test
             var body = new KeyValuePair<string, string>("BodyName", "BodyValue");
 
             // act
-            var result = new Uri(url).Put().WithBody(body).ExecuteForResult<dynamic>();
+            var result = new Uri(url).Put().WithBody(body).Call<dynamic>();
 
             // assert
             Assert.NotNull(result);
@@ -197,7 +219,7 @@ namespace Naos.FluentUri.Test
             var body = new KeyValuePair<string, string>("BodyName", "BodyValue");
 
             // act
-            var result = new Uri(url).Delete().WithBody(body).ExecuteForResult<dynamic>();
+            var result = new Uri(url).Delete().WithBody(body).Call<dynamic>();
 
             // assert
             Assert.NotNull(result);
@@ -226,7 +248,7 @@ namespace Naos.FluentUri.Test
 
             // act/assert
             Assert.Throws<DuplicateCallUsingFluentGrammarException>(
-                delegate { new Uri(url).Get().WithHeaders(null).WithHeaders(null); });
+                delegate { new Uri(url).Get().WithHeaders(new NameValueCollection()).WithHeaders(new NameValueCollection()); });
         }
 
         [Fact]
@@ -251,6 +273,22 @@ namespace Naos.FluentUri.Test
             // act/assert
             Assert.Throws<DuplicateCallUsingFluentGrammarException>(
                 delegate { new Uri(url).Get().WithTimeout(new TimeSpan()).WithTimeout(new TimeSpan()); });
+        }
+
+        [Fact]
+
+        // ReSharper disable once InconsistentNaming
+        public static void Call_ReturnsResponseHeaders_ResponseHeadersCaptured()
+        {
+            // arrange
+            var url = "http://httpbin.org/headers";
+            var outputHeaders = new KeyValuePair<string, string>[0];
+
+            // act
+            var result = new Uri(url).Get().WithResponseHeaderSaveAction(_ => outputHeaders = _).Call<dynamic>();
+
+            // assert
+            Assert.NotEqual(0, outputHeaders.Length);
         }
     }
 }

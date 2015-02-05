@@ -8,6 +8,7 @@ namespace Naos.FluentUri
 {
     using System.Collections.Generic;
     using System.Collections.Specialized;
+    using System.Linq;
     using System.Net;
 
     /// <summary>
@@ -15,6 +16,42 @@ namespace Naos.FluentUri
     /// </summary>
     public static class HeaderConvertionExtensionMethods
     {
+        /// <summary>
+        /// Gets the header in question if present (requires second level check...).
+        /// </summary>
+        /// <param name="headers">The headers set to look at.</param>
+        /// <param name="name">The header name to find.</param>
+        /// <returns>The value of the specified key if present.</returns>
+        public static string GetHeaderByName(this NameValueCollection headers, string name)
+        {
+            var values = headers.GetValues(name);
+
+            if (values == null)
+            {
+                return null;
+            }
+
+            return values.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the header in question if present (requires second level check...).
+        /// </summary>
+        /// <param name="headers">The headers set to look at.</param>
+        /// <param name="name">The header name to find.</param>
+        /// <returns>The value of the specified key if present.</returns>
+        public static string GetHeaderByName(this WebHeaderCollection headers, string name)
+        {
+            var values = headers.GetValues(name);
+
+            if (values == null)
+            {
+                return null;
+            }
+
+            return values.FirstOrDefault();
+        }
+
         /// <summary>
         /// Gets the headers collection as a key value pair array.
         /// </summary>

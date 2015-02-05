@@ -25,24 +25,33 @@ namespace Naos.FluentUri
         /// <param name="uri">Uri to make the request against.</param>
         /// <param name="httpVerb">HTTP verb to use.</param>
         /// <param name="body">Optional body object to send (use null if not needed).</param>
-        /// <param name="headers">Optional headers to use (use null if not needed).</param>
         /// <param name="cookieJar">Optional cookie to use (use null if not needed).</param>
-        /// <param name="contentType">Content type to use.</param>
+        /// <param name="headers">Optional headers to use (use null if not needed).</param>
+        /// <param name="saveResponseHeadersAction">Optional action to use to save response headers (use null if not needed).</param>
+        /// <param name="contentType">Content type to use for request.</param>
+        /// <param name="acceptType">Content type to use for response.</param>
         /// <param name="timeout">Timeout to use.</param>
-        /// <typeparam name="TResult">Return type to convert response to (if you provide VoidResultType then VoidResultType.Default will be returned - basically a void call).</typeparam>
+        /// <typeparam name="TResult">Return type to convert response to (if you provide VoidResultType then null will be returned - basically a void call).</typeparam>
         /// <returns>Converted response to the specified type.</returns>
         public static TResult Call<TResult>(
             Uri uri,
             Enums.HttpVerb httpVerb,
             object body,
-            KeyValuePair<string, string>[] headers,
             CookieJar cookieJar,
+            KeyValuePair<string, string>[] headers,
+            Action<KeyValuePair<string, string>[]> saveResponseHeadersAction,
             Enums.ContentType contentType,
-            TimeSpan timeout) where TResult : class
+            Enums.ContentType acceptType,
+            TimeSpan timeout)
         {
             if (contentType != Enums.ContentType.ApplicationJson)
             {
                 throw new ArgumentException("ContentType: " + contentType + " not supported at this time.", "contentType");
+            }
+
+            if (acceptType != Enums.ContentType.ApplicationJson)
+            {
+                throw new ArgumentException("AcceptType: " + contentType + " not supported at this time.", "acceptType");
             }
 
             if (timeout == default(TimeSpan))
@@ -71,6 +80,7 @@ namespace Naos.FluentUri
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(uri);
             req.CookieContainer = cookieContainer;
             req.ContentType = contentType.ToStringValue();
+            req.Accept = acceptType.ToStringValue();
             req.Method = httpVerbAsString;
             req.Timeout = (int)timeout.TotalMilliseconds;
 
@@ -114,17 +124,26 @@ namespace Naos.FluentUri
                 }
             }
 
-            // TODO: maybe raise these via an event later?
-            var responseHeaders = responseHeadersRaw.ToKeyValuePairArray();
-
-            TResult ret = null;
+            TResult ret = default(TResult);
             if (typeof(TResult) == typeof(VoidResultType))
             {
-                ret = VoidResultType.Default as TResult;
+                return ret; // this will just be null and should only be used when you don't want a return
             }
-            else if (contentType == Enums.ContentType.ApplicationJson)
+            else if (acceptType == Enums.ContentType.ApplicationJson)
             {
                 ret = JsonConvert.DeserializeObject<TResult>(contents);
+            }
+            else
+            {
+                throw new ArgumentException("AcceptType: " + contentType + " not supported at this time.", "acceptType");
+            }
+
+            var responseHeaders = responseHeadersRaw == null
+                                      ? new KeyValuePair<string, string>[0]
+                                      : responseHeadersRaw.ToKeyValuePairArray();
+            if (saveResponseHeadersAction != null)
+            {
+                saveResponseHeadersAction(responseHeaders);
             }
 
             return ret;

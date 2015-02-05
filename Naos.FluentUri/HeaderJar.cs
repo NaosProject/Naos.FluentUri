@@ -15,9 +15,11 @@ namespace Naos.FluentUri
     /// </summary>
     public class HeaderJar
     {
-        private WebHeaderCollection webHeaderCollectionHeaders;
+        private readonly WebHeaderCollection webHeaderCollectionHeaders;
 
-        private NameValueCollection nameValueCollectionHeaders;
+        private readonly NameValueCollection nameValueCollectionHeaders;
+
+        private readonly KeyValuePair<string, string>[] keyValuePairArrayHeaders;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HeaderJar"/> class.
@@ -46,6 +48,15 @@ namespace Naos.FluentUri
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="HeaderJar"/> class.
+        /// </summary>
+        /// <param name="headers">Headers to hold.</param>
+        public HeaderJar(KeyValuePair<string, string>[] headers)
+        {
+            this.keyValuePairArrayHeaders = headers;
+        }
+
+        /// <summary>
         /// Gets the headers.
         /// </summary>
         public KeyValuePair<string, string>[] Headers
@@ -59,6 +70,10 @@ namespace Naos.FluentUri
                 else if (this.webHeaderCollectionHeaders != null)
                 {
                     return this.webHeaderCollectionHeaders.ToKeyValuePairArray();
+                }
+                else if (this.keyValuePairArrayHeaders != null)
+                {
+                    return this.keyValuePairArrayHeaders;
                 }
                 else
                 {

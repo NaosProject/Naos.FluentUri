@@ -9,7 +9,7 @@ namespace Naos.FluentUri
     /// <summary>
     /// Interface of the call for all methods.
     /// </summary>
-    public interface ICallOnUriAll : ICallOnUriHeaders, ICallOnUriCookie, ICallOnUriTimeout, ICallOnUriBody, ICallOnUriExecute
+    public interface ICallOnUriAll : ICallOnUriHeaders, ICallOnUriCookie, ICallOnUriTimeout, ICallOnUriBody, ICallOnUriResponseHeaderSaveAction, ICallOnUriCall
     {
     }
 }
