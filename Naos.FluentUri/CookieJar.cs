@@ -6,6 +6,8 @@
 
 namespace Naos.FluentUri
 {
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Net;
     using System.Web;
 
@@ -14,32 +16,35 @@ namespace Naos.FluentUri
     /// </summary>
     public class CookieJar
     {
+        private readonly List<Cookie> cookies = new List<Cookie>();
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="CookieJar"/> class.
+        /// Gets the cookies.
         /// </summary>
-        /// <param name="cookie">Cookie to hold.</param>
-        public CookieJar(HttpCookie cookie)
+        public Cookie[] Cookies
         {
-            this.SystemWebHttpCookie = cookie;
+            get
+            {
+                return this.cookies.ToArray();
+            }
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CookieJar"/> class.
+        /// Adds the cookie to the set of cookie to use for a request.
         /// </summary>
-        /// <param name="cookie">Cookie to hold.</param>
-        public CookieJar(Cookie cookie)
+        /// <param name="cookie">Cookie to add to request.</param>
+        public void AddCookie(Cookie cookie)
         {
-            this.SystemNetCookie = cookie;
+            this.cookies.Add(cookie);
         }
-
+ 
         /// <summary>
-        /// Gets the System Web Http Cookie.
+        /// Adds the cookie to the set of cookie to use for a request.
         /// </summary>
-        public HttpCookie SystemWebHttpCookie { get; private set; }
-
-        /// <summary>
-        /// Gets the System Web Http Cookie.
-        /// </summary>
-        public Cookie SystemNetCookie { get; private set; }
+        /// <param name="cookie">Cookie to add to request.</param>
+        public void AddCookie(HttpCookie cookie)
+        {
+            this.cookies.Add(cookie.ToSystemNetCookie());
+        }
     }
 }

@@ -44,6 +44,44 @@ namespace Naos.FluentUri
             Enums.ContentType acceptType,
             TimeSpan timeout)
         {
+            var httpVerbAsString = httpVerb.ToString().ToUpper();
+            return Call<TResult>(
+                uri,
+                httpVerbAsString,
+                body,
+                cookieJar,
+                headers,
+                saveResponseHeadersAction,
+                contentType,
+                acceptType,
+                timeout);
+        }
+
+        /// <summary>
+        /// Makes a restful call using supplied information.
+        /// </summary>
+        /// <param name="uri">Uri to make the request against.</param>
+        /// <param name="httpVerb">HTTP verb to use.</param>
+        /// <param name="body">Optional body object to send (use null if not needed).</param>
+        /// <param name="cookieJar">Optional cookie to use (use null if not needed).</param>
+        /// <param name="headers">Optional headers to use (use null if not needed).</param>
+        /// <param name="saveResponseHeadersAction">Optional action to use to save response headers (use null if not needed).</param>
+        /// <param name="contentType">Content type to use for request.</param>
+        /// <param name="acceptType">Content type to use for response.</param>
+        /// <param name="timeout">Timeout to use.</param>
+        /// <typeparam name="TResult">Return type to convert response to (if you provide VoidResultType then null will be returned - basically a void call).</typeparam>
+        /// <returns>Converted response to the specified type.</returns>
+        public static TResult Call<TResult>(
+            Uri uri,
+            string httpVerb,
+            object body,
+            CookieJar cookieJar,
+            KeyValuePair<string, string>[] headers,
+            Action<KeyValuePair<string, string>[]> saveResponseHeadersAction,
+            Enums.ContentType contentType,
+            Enums.ContentType acceptType,
+            TimeSpan timeout)
+        {
             if (contentType != Enums.ContentType.ApplicationJson)
             {
                 throw new ArgumentException("ContentType: " + contentType + " not supported at this time.", "contentType");
@@ -60,28 +98,16 @@ namespace Naos.FluentUri
             }
 
             var cookieContainer = new CookieContainer();
-            if (cookieJar != null)
+            foreach (var cookie in cookieJar.Cookies)
             {
-                if (cookieJar.SystemNetCookie != null && cookieJar.SystemWebHttpCookie != null)
-                {
-                    throw new ArgumentException("CookieJar is not intended to have each cookie set", "cookieJar");
-                }
-                else if (cookieJar.SystemNetCookie != null)
-                {
-                    cookieContainer.Add(cookieJar.SystemNetCookie);
-                }
-                else if (cookieJar.SystemWebHttpCookie != null)
-                {
-                    cookieContainer.Add(cookieJar.SystemWebHttpCookie.ToSystemNetCookie());
-                }
+                cookieContainer.Add(cookie);
             }
 
-            var httpVerbAsString = httpVerb.ToString().ToUpper();
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(uri);
             req.CookieContainer = cookieContainer;
             req.ContentType = contentType.ToStringValue();
             req.Accept = acceptType.ToStringValue();
-            req.Method = httpVerbAsString;
+            req.Method = httpVerb;
             req.Timeout = (int)timeout.TotalMilliseconds;
 
             if (headers != null)
@@ -98,7 +124,7 @@ namespace Naos.FluentUri
                 bodyAsString = JsonConvert.SerializeObject(body);
             }
 
-            if (httpVerb != Enums.HttpVerb.Get && !string.IsNullOrEmpty(bodyAsString))
+            if (httpVerb != Enums.HttpVerb.Get.ToString().ToUpper() && !string.IsNullOrEmpty(bodyAsString))
             {
                 req.ContentLength = bodyAsString.Length;
                 using (var requestWriter = new StreamWriter(req.GetRequestStream(), Encoding.ASCII))

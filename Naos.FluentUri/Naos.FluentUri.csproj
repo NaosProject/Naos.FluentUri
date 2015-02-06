@@ -52,7 +52,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="ICallOnUriBody.cs" />
     <Compile Include="ICallOnUriResponseHeaderSaveAction.cs" />
-    <Compile Include="ICallOnUriCall.cs" />
+    <Compile Include="ICallOnUriVerb.cs" />
     <Compile Include="ICallOnUriTimeout.cs" />
     <Compile Include="Implementation.cs" />
     <Compile Include="CookieConvertionExtensionMethods.cs" />
@@ -63,7 +63,7 @@
     <Compile Include="ICallOnUriCookie.cs" />
     <Compile Include="ICallOnUriHeaders.cs" />
     <Compile Include="Operator.cs" />
-    <Compile Include="UriExtensionMethods.cs" />
+    <Compile Include="UriExtensionMethodsForCall.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VoidResultType.cs" />
   </ItemGroup>

@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CookieJarTest.cs" />
-    <Compile Include="UriExtensionMethodsTest.cs" />
+    <Compile Include="UriExtensionMethodsForCallTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

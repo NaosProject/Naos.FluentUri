@@ -16,21 +16,29 @@ namespace Naos.FluentUri
     public interface ICallOnUriHeaders
     {
         /// <summary>
-        /// Adds headers from a NameValueCollection to the call.
+        /// Adds the headers to the set of headers to use in the call.
+        /// </summary>
+        /// <param name="name">Name of header to add to set.</param>
+        /// <param name="value">Value of header to add to set.</param>
+        /// <returns>Updated fluent grammar chain.</returns>
+        ICallOnUriAll WithHeader(string name, string value);
+
+        /// <summary>
+        /// Adds the headers to the set of headers to use in the call.
         /// </summary>
         /// <param name="headers">Headers to add to call.</param>
         /// <returns>Updated fluent grammar chain.</returns>
         ICallOnUriAll WithHeaders(NameValueCollection headers);
 
         /// <summary>
-        /// Adds headers from a NameValueCollection to the call.
+        /// Adds the headers to the set of headers to use in the call.
         /// </summary>
         /// <param name="headers">Headers to add to call.</param>
         /// <returns>Updated fluent grammar chain.</returns>
         ICallOnUriAll WithHeaders(WebHeaderCollection headers);
 
         /// <summary>
-        /// Adds headers from a KeyValuePair string,string[] to the call.
+        /// Adds the headers to the set of headers to use in the call.
         /// </summary>
         /// <param name="headers">Headers to add to call.</param>
         /// <returns>Updated fluent grammar chain.</returns>

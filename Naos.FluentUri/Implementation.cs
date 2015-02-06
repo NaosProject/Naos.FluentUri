@@ -19,11 +19,9 @@ namespace Naos.FluentUri
 
         private readonly Uri uri;
 
-        private readonly Enums.HttpVerb httpVerb;
+        private readonly HeaderJar headerJar = new HeaderJar();
 
-        private HeaderJar headerJar = new HeaderJar();
-
-        private CookieJar cookieJar;
+        private readonly CookieJar cookieJar = new CookieJar();
 
         private TimeSpan timeout;
 
@@ -35,11 +33,9 @@ namespace Naos.FluentUri
         /// Initializes a new instance of the <see cref="Implementation"/> class.
         /// </summary>
         /// <param name="uri">Uri of the call.</param>
-        /// <param name="httpVerb">HttpVerb of the call</param>
-        public Implementation(Uri uri, Enums.HttpVerb httpVerb)
+        public Implementation(Uri uri)
         {
             this.uri = uri;
-            this.httpVerb = httpVerb;
             this.timeout = TimeSpan.FromSeconds(30);
         }
 
@@ -53,47 +49,44 @@ namespace Naos.FluentUri
         }
 
         /// <inheritdoc />
+        public ICallOnUriAll WithHeader(string name, string value)
+        {
+            this.headerJar.Add(name, value);
+            return this;
+        }
+
+        /// <inheritdoc />
         public ICallOnUriAll WithHeaders(NameValueCollection headers)
         {
-            this.UpdateCallListThrowIfAlreadyCalled("WithHeaders");
-
-            this.headerJar = new HeaderJar(headers);
+            this.headerJar.Add(headers);
             return this;
         }
 
         /// <inheritdoc />
         public ICallOnUriAll WithHeaders(WebHeaderCollection headers)
         {
-            this.UpdateCallListThrowIfAlreadyCalled("WithHeaders");
-
-            this.headerJar = new HeaderJar(headers);
+            this.headerJar.Add(headers);
             return this;
         }
 
         /// <inheritdoc />
         public ICallOnUriAll WithHeaders(KeyValuePair<string, string>[] headers)
         {
-            this.UpdateCallListThrowIfAlreadyCalled("WithHeaders");
-
-            this.headerJar = new HeaderJar(headers);
+            this.headerJar.Add(headers);
             return this;
         }
 
         /// <inheritdoc />
         public ICallOnUriAll WithCookie(Cookie cookie)
         {
-            this.UpdateCallListThrowIfAlreadyCalled("WithCookie");
-
-            this.cookieJar = new CookieJar(cookie);
+            this.cookieJar.AddCookie(cookie);
             return this;
         }
 
         /// <inheritdoc />
         public ICallOnUriAll WithCookie(HttpCookie cookie)
         {
-            this.UpdateCallListThrowIfAlreadyCalled("WithCookie");
-
-            this.cookieJar = new CookieJar(cookie);
+            this.cookieJar.AddCookie(cookie);
             return this;
         }
 
@@ -116,11 +109,11 @@ namespace Naos.FluentUri
         }
 
         /// <inheritdoc />
-        public void Call()
+        public void Get()
         {
             Operator.Call<VoidResultType>(
                 this.uri,
-                this.httpVerb,
+                Enums.HttpVerb.Get,
                 this.body,
                 this.cookieJar,
                 this.headerJar.Headers,
@@ -131,11 +124,131 @@ namespace Naos.FluentUri
         }
 
         /// <inheritdoc />
-        public TResult Call<TResult>()
+        public TResult Get<TResult>()
         {
             return Operator.Call<TResult>(
                 this.uri,
-                this.httpVerb,
+                Enums.HttpVerb.Get,
+                this.body,
+                this.cookieJar,
+                this.headerJar.Headers,
+                this.saveResponseHeadersAction,
+                Enums.ContentType.ApplicationJson,
+                Enums.ContentType.ApplicationJson,
+                this.timeout);
+        }
+
+        /// <inheritdoc />
+        public void Post()
+        {
+            Operator.Call<VoidResultType>(
+                this.uri,
+                Enums.HttpVerb.Post,
+                this.body,
+                this.cookieJar,
+                this.headerJar.Headers,
+                this.saveResponseHeadersAction,
+                Enums.ContentType.ApplicationJson,
+                Enums.ContentType.ApplicationJson,
+                this.timeout);
+        }
+
+        /// <inheritdoc />
+        public TResult Post<TResult>()
+        {
+            return Operator.Call<TResult>(
+                this.uri,
+                Enums.HttpVerb.Post,
+                this.body,
+                this.cookieJar,
+                this.headerJar.Headers,
+                this.saveResponseHeadersAction,
+                Enums.ContentType.ApplicationJson,
+                Enums.ContentType.ApplicationJson,
+                this.timeout);
+        }
+
+        /// <inheritdoc />
+        public void Put()
+        {
+            Operator.Call<VoidResultType>(
+                this.uri,
+                Enums.HttpVerb.Put,
+                this.body,
+                this.cookieJar,
+                this.headerJar.Headers,
+                this.saveResponseHeadersAction,
+                Enums.ContentType.ApplicationJson,
+                Enums.ContentType.ApplicationJson,
+                this.timeout);
+        }
+
+        /// <inheritdoc />
+        public TResult Put<TResult>()
+        {
+            return Operator.Call<TResult>(
+                this.uri,
+                Enums.HttpVerb.Put,
+                this.body,
+                this.cookieJar,
+                this.headerJar.Headers,
+                this.saveResponseHeadersAction,
+                Enums.ContentType.ApplicationJson,
+                Enums.ContentType.ApplicationJson,
+                this.timeout);
+        }
+
+        /// <inheritdoc />
+        public void Delete()
+        {
+            Operator.Call<VoidResultType>(
+                this.uri,
+                Enums.HttpVerb.Delete,
+                this.body,
+                this.cookieJar,
+                this.headerJar.Headers,
+                this.saveResponseHeadersAction,
+                Enums.ContentType.ApplicationJson,
+                Enums.ContentType.ApplicationJson,
+                this.timeout);
+        }
+
+        /// <inheritdoc />
+        public TResult Delete<TResult>()
+        {
+            return Operator.Call<TResult>(
+                this.uri,
+                Enums.HttpVerb.Delete,
+                this.body,
+                this.cookieJar,
+                this.headerJar.Headers,
+                this.saveResponseHeadersAction,
+                Enums.ContentType.ApplicationJson,
+                Enums.ContentType.ApplicationJson,
+                this.timeout);
+        }
+
+        /// <inheritdoc />
+        public void UsingVerb(string httpVerb)
+        {
+            Operator.Call<VoidResultType>(
+                this.uri,
+                httpVerb,
+                this.body,
+                this.cookieJar,
+                this.headerJar.Headers,
+                this.saveResponseHeadersAction,
+                Enums.ContentType.ApplicationJson,
+                Enums.ContentType.ApplicationJson,
+                this.timeout);
+        }
+
+        /// <inheritdoc />
+        public TResult UsingVerb<TResult>(string httpVerb)
+        {
+            return Operator.Call<TResult>(
+                this.uri,
+                httpVerb,
                 this.body,
                 this.cookieJar,
                 this.headerJar.Headers,

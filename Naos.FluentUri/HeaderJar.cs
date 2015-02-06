@@ -15,46 +15,7 @@ namespace Naos.FluentUri
     /// </summary>
     public class HeaderJar
     {
-        private readonly WebHeaderCollection webHeaderCollectionHeaders;
-
-        private readonly NameValueCollection nameValueCollectionHeaders;
-
-        private readonly KeyValuePair<string, string>[] keyValuePairArrayHeaders;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HeaderJar"/> class.
-        /// </summary>
-        public HeaderJar()
-        {
-            // Deliberate no-op
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HeaderJar"/> class.
-        /// </summary>
-        /// <param name="headers">Headers to hold.</param>
-        public HeaderJar(NameValueCollection headers)
-        {
-            this.nameValueCollectionHeaders = headers;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HeaderJar"/> class.
-        /// </summary>
-        /// <param name="headers">Headers to hold.</param>
-        public HeaderJar(WebHeaderCollection headers)
-        {
-            this.webHeaderCollectionHeaders = headers;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HeaderJar"/> class.
-        /// </summary>
-        /// <param name="headers">Headers to hold.</param>
-        public HeaderJar(KeyValuePair<string, string>[] headers)
-        {
-            this.keyValuePairArrayHeaders = headers;
-        }
+        private readonly List<KeyValuePair<string, string>> headers = new List<KeyValuePair<string, string>>();
 
         /// <summary>
         /// Gets the headers.
@@ -63,23 +24,47 @@ namespace Naos.FluentUri
         {
             get
             {
-                if (this.nameValueCollectionHeaders != null)
-                {
-                    return this.nameValueCollectionHeaders.ToKeyValuePairArray();
-                }
-                else if (this.webHeaderCollectionHeaders != null)
-                {
-                    return this.webHeaderCollectionHeaders.ToKeyValuePairArray();
-                }
-                else if (this.keyValuePairArrayHeaders != null)
-                {
-                    return this.keyValuePairArrayHeaders;
-                }
-                else
-                {
-                    return null;
-                }
+                return this.headers.ToArray();
             }
+        }
+
+        /// <summary>
+        /// Adds the headers to the set of headers to use in the request.
+        /// </summary>
+        /// <param name="headers">Headers to add to set.</param>
+        public void Add(NameValueCollection headers)
+        {
+            var transformedHeaders = headers.ToKeyValuePairArray();
+            this.headers.AddRange(transformedHeaders);
+        }
+
+        /// <summary>
+        /// Adds the headers to the set of headers to use in the request.
+        /// </summary>
+        /// <param name="headers">Headers to add to set.</param>
+        public void Add(WebHeaderCollection headers)
+        {
+            var transformedHeaders = headers.ToKeyValuePairArray();
+            this.headers.AddRange(transformedHeaders);
+        }
+
+        /// <summary>
+        /// Adds the headers to the set of headers to use in the request.
+        /// </summary>
+        /// <param name="headers">Headers to add to set.</param>
+        public void Add(KeyValuePair<string, string>[] headers)
+        {
+            this.headers.AddRange(headers);
+        }
+
+        /// <summary>
+        /// Adds the headers to the set of headers to use in the request.
+        /// </summary>
+        /// <param name="name">Name of header to add to set.</param>
+        /// <param name="value">Value of header to add to set.</param>
+        public void Add(string name, string value)
+        {
+            this.headers.Add(new KeyValuePair<string, string>(name, value));
         }
     }
 }
