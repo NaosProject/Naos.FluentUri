@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Implementation.cs" company="Naos">
+// <copyright file="ImplementationForICallOnUriAll.cs" company="Naos">
 //   Copyright 2015 Naos
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -13,7 +13,7 @@ namespace Naos.FluentUri
     using System.Web;
 
     /// <inheritdoc />
-    public class Implementation : ICallOnUriAll
+    public class ImplementationForICallOnUriAll : ICallOnUriAll
     {
         private readonly IDictionary<string, bool> decoratorsCalled = new Dictionary<string, bool>(); 
 
@@ -30,10 +30,10 @@ namespace Naos.FluentUri
         private Action<KeyValuePair<string, string>[]> saveResponseHeadersAction;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Implementation"/> class.
+        /// Initializes a new instance of the <see cref="ImplementationForICallOnUriAll"/> class.
         /// </summary>
         /// <param name="uri">Uri of the call.</param>
-        public Implementation(Uri uri)
+        public ImplementationForICallOnUriAll(Uri uri)
         {
             this.uri = uri;
             this.timeout = TimeSpan.FromSeconds(30);
@@ -229,7 +229,7 @@ namespace Naos.FluentUri
         }
 
         /// <inheritdoc />
-        public void UsingVerb(string httpVerb)
+        public void CallWithVerb(string httpVerb)
         {
             Operator.Call<VoidResultType>(
                 this.uri,
@@ -244,7 +244,7 @@ namespace Naos.FluentUri
         }
 
         /// <inheritdoc />
-        public TResult UsingVerb<TResult>(string httpVerb)
+        public TResult CallWithVerb<TResult>(string httpVerb)
         {
             return Operator.Call<TResult>(
                 this.uri,

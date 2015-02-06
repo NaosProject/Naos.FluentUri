@@ -21,6 +21,7 @@ This library is concerned with the standard calls to RESTful services from a .NE
  - POST - `new Uri("http://api/Objects/").Post();`
  - PUT - `new Uri("http://api/Objects/42/Setting").Put();`
  - DELETE - `new Uri("http://api/Objects/42").Delete();`
+ - "Custom Verb" - `new Uri("http://api/Objects/42").CallWithVerb("Custom Verb");`
 
 3. There are additional decorators for the call for standard operations.
  - Add a body to the request:

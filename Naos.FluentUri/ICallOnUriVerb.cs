@@ -63,7 +63,7 @@ namespace Naos.FluentUri
         /// Executes the chain using the specified verb without a response.
         /// </summary>
         /// <param name="httpVerb">Specified HTTP verb to use.</param>
-        void UsingVerb(string httpVerb);
+        void CallWithVerb(string httpVerb);
 
         /// <summary>
         /// Executes the chain using the specified verb with a response to the provided type.
@@ -71,6 +71,6 @@ namespace Naos.FluentUri
         /// <param name="httpVerb">Specified HTTP verb to use.</param>
         /// <typeparam name="TResult">Type to convert the response to.</typeparam>
         /// <returns>Converted output from the call.</returns>
-        TResult UsingVerb<TResult>(string httpVerb);
+        TResult CallWithVerb<TResult>(string httpVerb);
     }
 }

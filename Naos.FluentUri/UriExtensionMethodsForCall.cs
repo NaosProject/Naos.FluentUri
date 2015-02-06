@@ -25,7 +25,7 @@ namespace Naos.FluentUri
         /// <returns>Updated fluent grammar chain.</returns>
         public static ICallOnUriAll WithCookie(this Uri uri, HttpCookie cookie)
         {
-            return new Implementation(uri).WithCookie(cookie);
+            return new ImplementationForICallOnUriAll(uri).WithCookie(cookie);
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Naos.FluentUri
         /// <returns>Updated fluent grammar chain.</returns>
         public static ICallOnUriAll WithCookie(this Uri uri, Cookie cookie)
         {
-            return new Implementation(uri).WithCookie(cookie);
+            return new ImplementationForICallOnUriAll(uri).WithCookie(cookie);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Naos.FluentUri
         /// <returns>Updated fluent grammar chain.</returns>
         public static ICallOnUriAll WithTimeout(this Uri uri, TimeSpan timeout)
         {
-            return new Implementation(uri).WithTimeout(timeout);
+            return new ImplementationForICallOnUriAll(uri).WithTimeout(timeout);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Naos.FluentUri
         /// <returns>Updated fluent grammar chain.</returns>
         public static ICallOnUriAll WithHeader(this Uri uri, string name, string value)
         {
-            return new Implementation(uri).WithHeader(name, value);
+            return new ImplementationForICallOnUriAll(uri).WithHeader(name, value);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Naos.FluentUri
         /// <returns>Updated fluent grammar chain.</returns>
         public static ICallOnUriAll WithHeaders(this Uri uri, NameValueCollection headers)
         {
-            return new Implementation(uri).WithHeaders(headers);
+            return new ImplementationForICallOnUriAll(uri).WithHeaders(headers);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Naos.FluentUri
         /// <returns>Updated fluent grammar chain.</returns>
         public static ICallOnUriAll WithHeaders(this Uri uri, WebHeaderCollection headers)
         {
-            return new Implementation(uri).WithHeaders(headers);
+            return new ImplementationForICallOnUriAll(uri).WithHeaders(headers);
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Naos.FluentUri
         /// <returns>Updated fluent grammar chain.</returns>
         public static ICallOnUriAll WithHeaders(this Uri uri, KeyValuePair<string, string>[] headers)
         {
-            return new Implementation(uri).WithHeaders(headers);
+            return new ImplementationForICallOnUriAll(uri).WithHeaders(headers);
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Naos.FluentUri
         /// <returns>Updated fluent grammar chain.</returns>
         public static ICallOnUriAll WithBody(this Uri uri, object body)
         {
-            return new Implementation(uri).WithBody(body);
+            return new ImplementationForICallOnUriAll(uri).WithBody(body);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace Naos.FluentUri
         /// <returns>Response headers as an array of key value pair elements.</returns>
         public static ICallOnUriAll WithResponseHeaderSaveAction(this Uri uri, Action<KeyValuePair<string, string>[]> outputAction)
         {
-            return new Implementation(uri).WithResponseHeaderSaveAction(outputAction);
+            return new ImplementationForICallOnUriAll(uri).WithResponseHeaderSaveAction(outputAction);
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Naos.FluentUri
         /// <param name="uri">Uri (extension method variable) to use for chain.</param>
         public static void Get(this Uri uri)
         {
-            new Implementation(uri).Get();
+            new ImplementationForICallOnUriAll(uri).Get();
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Naos.FluentUri
         /// <returns>Converted output from the call.</returns>
         public static TResult Get<TResult>(this Uri uri)
         {
-            return new Implementation(uri).Get<TResult>();
+            return new ImplementationForICallOnUriAll(uri).Get<TResult>();
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace Naos.FluentUri
         /// <param name="uri">Uri (extension method variable) to use for chain.</param>
         public static void Post(this Uri uri)
         {
-            new Implementation(uri).Post();
+            new ImplementationForICallOnUriAll(uri).Post();
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Naos.FluentUri
         /// <returns>Converted output from the call.</returns>
         public static TResult Post<TResult>(this Uri uri)
         {
-            return new Implementation(uri).Post<TResult>();
+            return new ImplementationForICallOnUriAll(uri).Post<TResult>();
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace Naos.FluentUri
         /// <param name="uri">Uri (extension method variable) to use for chain.</param>
         public static void Put(this Uri uri)
         {
-            new Implementation(uri).Put();
+            new ImplementationForICallOnUriAll(uri).Put();
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace Naos.FluentUri
         /// <returns>Converted output from the call.</returns>
         public static TResult Put<TResult>(this Uri uri)
         {
-            return new Implementation(uri).Put<TResult>();
+            return new ImplementationForICallOnUriAll(uri).Put<TResult>();
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Naos.FluentUri
         /// <param name="uri">Uri (extension method variable) to use for chain.</param>
         public static void Delete(this Uri uri)
         {
-            new Implementation(uri).Delete();
+            new ImplementationForICallOnUriAll(uri).Delete();
         }
 
         /// <summary>
@@ -194,29 +194,29 @@ namespace Naos.FluentUri
         /// <returns>Converted output from the call.</returns>
         public static TResult Delete<TResult>(this Uri uri)
         {
-            return new Implementation(uri).Delete<TResult>();
+            return new ImplementationForICallOnUriAll(uri).Delete<TResult>();
         }
 
         /// <summary>
-        /// Executes the chain using the specified verb without a response.
+        /// Executes the chain using the specified HTTP verb without a response.
         /// </summary>
         /// <param name="uri">Uri (extension method variable) to use for chain.</param>
         /// <param name="httpVerb">Specified HTTP verb to use.</param>
-        public static void UsingVerb(this Uri uri, string httpVerb)
+        public static void CallWithVerb(this Uri uri, string httpVerb)
         {
-            new Implementation(uri).UsingVerb(httpVerb);
+            new ImplementationForICallOnUriAll(uri).CallWithVerb(httpVerb);
         }
 
         /// <summary>
-        /// Executes the chain using the specified verb with a response to the provided type.
+        /// Executes the chain using the specified HTTP verb with a response to the provided type.
         /// </summary>
         /// <param name="uri">Uri (extension method variable) to use for chain.</param>
         /// <param name="httpVerb">Specified HTTP verb to use.</param>
         /// <typeparam name="TResult">Type to convert the response to.</typeparam>
         /// <returns>Converted output from the call.</returns>
-        public static TResult UsingVerb<TResult>(this Uri uri, string httpVerb)
+        public static TResult CallWithVerb<TResult>(this Uri uri, string httpVerb)
         {
-            return new Implementation(uri).UsingVerb<TResult>(httpVerb);
+            return new ImplementationForICallOnUriAll(uri).CallWithVerb<TResult>(httpVerb);
         }
     }
 }

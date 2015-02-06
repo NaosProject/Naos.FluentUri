@@ -54,7 +54,7 @@
     <Compile Include="ICallOnUriResponseHeaderSaveAction.cs" />
     <Compile Include="ICallOnUriVerb.cs" />
     <Compile Include="ICallOnUriTimeout.cs" />
-    <Compile Include="Implementation.cs" />
+    <Compile Include="ImplementationForICallOnUriAll.cs" />
     <Compile Include="CookieConvertionExtensionMethods.cs" />
     <Compile Include="CookieJar.cs" />
     <Compile Include="HeaderConvertionExtensionMethods.cs" />

@@ -289,6 +289,23 @@ namespace Naos.FluentUri.Test
 
         [Fact]
         // ReSharper disable once InconsistentNaming
+        public static void Call_CustomVerb_ValidResponse()
+        {
+            // arrange
+            var url = "http://httpbin.org/delete";
+            var body = new KeyValuePair<string, string>("BodyName", "BodyValue");
+
+            // act
+            var result = new Uri(url).WithBody(body).CallWithVerb<dynamic>("DELETE");
+
+            // assert
+            Assert.NotNull(result);
+            Assert.Equal(body.Key, result.json.Key.ToString());
+            Assert.Equal(body.Value, result.json.Value.ToString());
+        }
+
+        [Fact]
+        // ReSharper disable once InconsistentNaming
         public static void Call_WithBodyTwice_ThrowsException()
         {
             // arrange
@@ -352,7 +369,15 @@ namespace Naos.FluentUri.Test
             methodsOnInterface = removeOnesToNotCompare(methodsOnInterface);
             methodsOnType = removeOnesToNotCompare(methodsOnType);
 
-            Assert.Equal(methodsOnInterface.Count(), methodsOnType.Count());
+            methodsOnInterface = methodsOnInterface.OrderBy(_ => _.Name).ToList();
+            methodsOnType = methodsOnType.OrderBy(_ => _.Name).ToList();
+
+            Assert.Equal(methodsOnInterface.Count, methodsOnType.Count);
+
+            for (var idx = 0; idx < methodsOnInterface.Count; idx++)
+            {
+                Assert.Equal(methodsOnInterface[idx].Name, methodsOnType[idx].Name);
+            }
         }
     }
 }
