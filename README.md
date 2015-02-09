@@ -4,26 +4,35 @@
 
 Naos.FluentUri
 =============
-A fluent grammar on top of the .NET Uri object for calling RESTful services.
+A fluent grammar on top of the .NET Uri object for building up the Uri of a RESTful service and calling it with the appropriate information.
 
-Overview
---------
-This library is concerned with the standard calls to RESTful services from a .NET application.  You can call all four verbs and you can call them either void return or a typed return.
+Building up the Uri
+-------------------
+* Adding segments to the URL
+ - To get `http://baseUrlOfService/subPath` use `new Uri("http://baseUrlOfService").AppendPathSegment("subPath");`
+ - Trailing slashes are handled... `http://baseUrlOfService/subPath` can also be done using `new Uri("http://baseUrlOfService/").AppendPathSegment("subPath");`
 
-1. Void Return vs. Typed Return
+* Adding query string parameters
+ - To get `http://url?myParam=aValue` use `new Uri(http://url).AppendQueryStringParam("myParam", "aValue");`
+ - Can also be done in batches by using `.AppendQueryStringParams(/* IDictionary<string, string> */);` or `.AppendQueryStringParams(/* ICollection<KeyValuePair<string, string>> */);`
+ - Will work correctly out of order too... `http://url/path?q=hello` can be done using `new Uri("http://url").AppendQueryStringParam("q", "hello").AppendPathSegment("path");` although this is not really recommended as it doesn't read great...
+ 
+Calling the Uri
+---------------
+* Void Return vs. Typed Return
  - Void Return Usage:
      - `new Uri("http://api/Objects/42/Setting").Put();`
  - Typed Return Usage: 
      - `MyObject returnedData = net Uri("http://api/Objects/42").Get<MyObject>();`
 
-2. The four main verbs are currently supported.
+* The four main verbs are currently supported as first class methods as well as a method to pass any verb as a string.
  - GET - `new Uri("http://api/Objects/42").Get();`
  - POST - `new Uri("http://api/Objects/").Post();`
  - PUT - `new Uri("http://api/Objects/42/Setting").Put();`
  - DELETE - `new Uri("http://api/Objects/42").Delete();`
  - "Custom Verb" - `new Uri("http://api/Objects/42").CallWithVerb("Custom Verb");`
 
-3. There are additional decorators for the call for standard operations.
+* There are additional decorators for the call for standard operations.
  - Add a body to the request:
      - `new Uri("http://api/Objects/").WithBody(new MyObject()).Post();`
  - Add a cookie to the request:
@@ -39,3 +48,23 @@ This library is concerned with the standard calls to RESTful services from a .NE
  - Save response headers using a lambda:
      - `KeyValuePair<string, string>[] responseHeadersFromCall;`
      - `new Uri("http://api/Auth/Login").WithResponseHeaderSaveAction(responseHeaders => responseHeadersFromCall = responseHeaders).Post();`
+
+Combined Examples
+------------
+* Example of a request that might authenticate against a system.
+ - ```
+var loginResponse = new Uri("http://auth.services.com")
+            .AppendPathSegment("login")
+            .WithBody(loginRequest)
+            .Post<LoginResponse>();
+```
+* Example of a request that might update a user's zip code in the system.
+ - ```
+new Uri("http://user.services.com")
+            .AppendPathSegment("user")
+            .AppendPathSegment(user.Id)
+            .AppendPathSegment("zipCode")
+            .AppendPathSegment(user.ZipCode)
+            .WithCookie(authCookieToAllowThis)
+            .Put();
+```
