@@ -161,7 +161,7 @@ namespace Naos.FluentUri
             }
             else
             {
-                throw new ArgumentException("AcceptType: " + contentType + " not supported at this time.", "acceptType");
+                throw new ArgumentException("AcceptType: " + acceptType + " not supported at this time.", "acceptType");
             }
 
             var responseHeaders = responseHeadersRaw == null

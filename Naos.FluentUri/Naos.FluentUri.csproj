@@ -62,7 +62,9 @@
     <Compile Include="ICallOnUriAll.cs" />
     <Compile Include="ICallOnUriCookie.cs" />
     <Compile Include="ICallOnUriHeaders.cs" />
+    <Compile Include="ObjectToArrayExtensionMethod.cs" />
     <Compile Include="Operator.cs" />
+    <Compile Include="UriExtensionMethodsForBuilding.cs" />
     <Compile Include="UriExtensionMethodsForCall.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VoidResultType.cs" />

@@ -53,18 +53,18 @@ namespace Naos.FluentUri
         }
 
         /// <summary>
-        /// Gets the headers collection as a key value pair array.
+        /// Gets the collection as a key value pair array.
         /// </summary>
-        /// <param name="headers">Headers as a name value collection.</param>
-        /// <returns>Array of key value pairs of the header name and value.</returns>
-        public static KeyValuePair<string, string>[] ToKeyValuePairArray(this NameValueCollection headers)
+        /// <param name="collection">Collection of items as a name value collection.</param>
+        /// <returns>Array of key value pairs of the items name and value.</returns>
+        public static KeyValuePair<string, string>[] ToKeyValuePairArray(this NameValueCollection collection)
         {
             var ret = new List<KeyValuePair<string, string>>();
-            if (headers != null)
+            if (collection != null)
             {
-                foreach (var key in headers.AllKeys)
+                foreach (var key in collection.AllKeys)
                 {
-                    var values = headers.GetValues(key);
+                    var values = collection.GetValues(key);
                     if (values != null)
                     {
                         foreach (var value in values)
