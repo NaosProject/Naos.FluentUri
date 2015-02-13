@@ -6,7 +6,14 @@ Naos.FluentUri
 =============
 A fluent grammar on top of the .NET Uri object for building up the Uri of a RESTful service and calling it with the appropriate information.
 
-Building up the Uri
+Use - Referencing in your code
+-----------
+The entire implemenation is in a single file so it can be included without taking a dependency on the NuGet package if necessary preferred.
+* Reference the NuGet package: <a href="http://www.nuget.org/packages/Naos.FluentUri">http://www.nuget.org/packages/Naos.FluentUri</a>.
+  <br/><b>OR</b>
+* Include the single file in your project: <a href="https://raw.githubusercontent.com/NaosFramework/Naos.FluentUri/master/Naos.FluentUri/Naos.FluentUri.cs">https://raw.githubusercontent.com/NaosFramework/Naos.FluentUri/master/Naos.FluentUri/Naos.FluentUri.cs</a>.
+
+Use - Building up the Uri
 -------------------
 * Adding segments to the URL
  - To get `http://baseUrlOfService/subPath` use `new Uri("http://baseUrlOfService").AppendPathSegment("subPath");`
@@ -17,7 +24,7 @@ Building up the Uri
  - Can also be done in batches by using `.AppendQueryStringParams(/* IDictionary<string, string> */);` or `.AppendQueryStringParams(/* ICollection<KeyValuePair<string, string>> */);`
  - Will work correctly out of order too... `http://url/path?q=hello` can be done using `new Uri("http://url").AppendQueryStringParam("q", "hello").AppendPathSegment("path");` although this is not really recommended as it doesn't read great...
  
-Calling the Uri
+Use - Calling the Uri
 ---------------
 * Void Return vs. Typed Return
  - Void Return Usage:

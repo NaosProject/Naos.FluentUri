@@ -48,26 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DuplicateCallUsingFluentGrammarException.cs" />
-    <Compile Include="Enums.cs" />
-    <Compile Include="ICallOnUriBody.cs" />
-    <Compile Include="ICallOnUriResponseHeaderSaveAction.cs" />
-    <Compile Include="ICallOnUriVerb.cs" />
-    <Compile Include="ICallOnUriTimeout.cs" />
-    <Compile Include="ImplementationForICallOnUriAll.cs" />
-    <Compile Include="CookieConvertionExtensionMethods.cs" />
-    <Compile Include="CookieJar.cs" />
-    <Compile Include="HeaderConvertionExtensionMethods.cs" />
-    <Compile Include="HeaderJar.cs" />
-    <Compile Include="ICallOnUriAll.cs" />
-    <Compile Include="ICallOnUriCookie.cs" />
-    <Compile Include="ICallOnUriHeaders.cs" />
-    <Compile Include="ObjectToArrayExtensionMethod.cs" />
-    <Compile Include="Operator.cs" />
-    <Compile Include="UriExtensionMethodsForBuilding.cs" />
-    <Compile Include="UriExtensionMethodsForCall.cs" />
+    <Compile Include="Naos.FluentUri.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VoidResultType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
