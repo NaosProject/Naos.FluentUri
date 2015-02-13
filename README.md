@@ -1,6 +1,10 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/github/NaosFramework/Naos.FluentUri?branch=master&svg=true)](https://ci.appveyor.com/project/NaosLLC/naos-fluenturi)
+<a target="_blank" href="https://ci.appveyor.com/project/NaosLLC/naos-fluenturi">
+![Build status](https://ci.appveyor.com/api/projects/status/github/NaosFramework/Naos.FluentUri?branch=master&svg=true)
+</a>
 <br/> 
-[![NuGet Status](http://nugetstatus.com/Naos.FluentUri.png)](http://nugetstatus.com/packages/Naos.FluentUri)
+<a target="_blank" href="http://nugetstatus.com/packages/Naos.FluentUri">
+![NuGet Status](http://nugetstatus.com/Naos.FluentUri.png)
+</a>
 
 Naos.FluentUri
 =============
@@ -9,9 +13,9 @@ A fluent grammar on top of the .NET Uri object for building up the Uri of a REST
 Use - Referencing in your code
 -----------
 The entire implemenation is in a single file so it can be included without taking a dependency on the NuGet package if necessary preferred.
-* Reference the NuGet package: <a href="http://www.nuget.org/packages/Naos.FluentUri">http://www.nuget.org/packages/Naos.FluentUri</a>.
+* Reference the NuGet package: <a target="_blank" href="http://www.nuget.org/packages/Naos.FluentUri">http://www.nuget.org/packages/Naos.FluentUri</a>.
   <br/><b>OR</b>
-* Include the single file in your project: <a href="https://raw.githubusercontent.com/NaosFramework/Naos.FluentUri/master/Naos.FluentUri/Naos.FluentUri.cs">https://raw.githubusercontent.com/NaosFramework/Naos.FluentUri/master/Naos.FluentUri/Naos.FluentUri.cs</a>.
+* Include the single file in your project: <a target="_blank" href="https://raw.githubusercontent.com/NaosFramework/Naos.FluentUri/master/Naos.FluentUri/Naos.FluentUri.cs">https://raw.githubusercontent.com/NaosFramework/Naos.FluentUri/master/Naos.FluentUri/Naos.FluentUri.cs</a>.
 
 Use - Building up the Uri
 -------------------
