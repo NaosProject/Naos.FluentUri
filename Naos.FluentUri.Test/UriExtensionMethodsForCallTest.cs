@@ -214,6 +214,7 @@ namespace Naos.FluentUri.Test
             catch (WebException ex)
             {
                 // assert
+                Console.WriteLine(ex.Message);
                 Assert.True(ex.Message.Contains("The operation has timed out"));
             }
         }
