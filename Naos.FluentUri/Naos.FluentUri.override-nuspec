@@ -1,0 +1,6 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <description>A fluent grammar on top of the .NET Uri object for building up the Uri of a RESTful service and calling it with the appropriate information.</description>
+  </metadata>
+</package>
