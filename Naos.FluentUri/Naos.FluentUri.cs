@@ -9,7 +9,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 #if NaosFluentUri
-    namespace Naos.FluentUri
+namespace Naos.FluentUri
 #else
     namespace Naos.Recipes.FluentUri
 #endif
@@ -27,6 +27,8 @@
     using Naos.Serialization.Json;
 
     using Spritely.Recipes;
+
+    using static System.FormattableString;
 
     /// <summary>
     /// Verbs that can be used for HTTP calls.
@@ -72,9 +74,14 @@
         enum ContentType
     {
         /// <summary>
-        /// Application JSON type.
+        /// Application/JSON type.
         /// </summary>
         ApplicationJson,
+
+        /// <summary>
+        /// Text/plain type.
+        /// </summary>
+        TextPlain,
     }
 
     /// <summary>
@@ -421,7 +428,7 @@
         /// <param name="httpVerb">HTTP verb to use.</param>
         /// <param name="body">Optional body object to send (use null if not needed).</param>
         /// <param name="cookieJar">Optional cookie to use (use null if not needed).</param>
-        /// <param name="headers">Optional headers to use (use null if not needed).</param>
+        /// <param name="headerJar">Optional headers to use (use null if not needed).</param>
         /// <param name="saveResponseHeadersAction">Optional action to use to save response headers (use null if not needed).</param>
         /// <param name="contentType">Content type to use for request.</param>
         /// <param name="acceptType">Content type to use for response.</param>
@@ -434,12 +441,12 @@
             HttpVerb httpVerb,
             object body,
             CookieJar cookieJar,
-            KeyValuePair<string, string>[] headers,
+            HeaderJar headerJar,
             Action<KeyValuePair<string, string>[]> saveResponseHeadersAction,
             ContentType contentType,
             ContentType acceptType,
             TimeSpan timeout,
-            IStringSerializeAndDeserialize serializer)
+            IStringSerializeAndDeserialize serializer) where TResult : class
         {
             var httpVerbAsString = httpVerb.ToString().ToUpperInvariant();
             return Call<TResult>(
@@ -447,7 +454,7 @@
                 httpVerbAsString,
                 body,
                 cookieJar,
-                headers,
+                headerJar,
                 saveResponseHeadersAction,
                 contentType,
                 acceptType,
@@ -462,7 +469,7 @@
         /// <param name="httpVerb">HTTP verb to use.</param>
         /// <param name="body">Optional body object to send (use null if not needed).</param>
         /// <param name="cookieJar">Optional cookie to use (use null if not needed).</param>
-        /// <param name="headers">Optional headers to use (use null if not needed).</param>
+        /// <param name="headerJar">Optional headers to use (use null if not needed).</param>
         /// <param name="saveResponseHeadersAction">Optional action to use to save response headers (use null if not needed).</param>
         /// <param name="contentType">Content type to use for request.</param>
         /// <param name="acceptType">Content type to use for response.</param>
@@ -475,23 +482,28 @@
             string httpVerb,
             object body,
             CookieJar cookieJar,
-            KeyValuePair<string, string>[] headers,
+            HeaderJar headerJar,
             Action<KeyValuePair<string, string>[]> saveResponseHeadersAction,
             ContentType contentType,
             ContentType acceptType,
             TimeSpan timeout,
-            IStringSerializeAndDeserialize serializer)
+            IStringSerializeAndDeserialize serializer) where TResult : class
         {
             new { uri }.Must().NotBeNull().OrThrow();
             new { httpVerb }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
             new { serializer }.Must().NotBeNull().OrThrow();
+
+            if (acceptType == ContentType.TextPlain && typeof(TResult) != typeof(string))
+            {
+                throw new ArgumentException("Must have return of string when accepting text type.");
+            }
 
             if (contentType != ContentType.ApplicationJson)
             {
                 throw new ArgumentException("ContentType: " + contentType + " not supported at this time.", nameof(contentType));
             }
 
-            if (acceptType != ContentType.ApplicationJson)
+            if (acceptType != ContentType.ApplicationJson && acceptType != ContentType.TextPlain)
             {
                 throw new ArgumentException("AcceptType: " + contentType + " not supported at this time.", nameof(acceptType));
             }
@@ -508,20 +520,14 @@
             }
 
             // ReSharper disable once AccessToStaticMemberViaDerivedType - want to call this method...
-            HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(uri);
-            req.CookieContainer = cookieContainer;
-            req.ContentType = contentType.ToStringValue();
-            req.Accept = acceptType.ToStringValue();
-            req.Method = httpVerb;
-            req.Timeout = (int)timeout.TotalMilliseconds;
+            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(uri);
+            request.CookieContainer = cookieContainer;
+            request.ContentType = contentType.ToStringValue();
+            request.Accept = acceptType.ToStringValue();
+            request.Method = httpVerb;
+            request.Timeout = (int)timeout.TotalMilliseconds;
 
-            if (headers != null)
-            {
-                foreach (var header in headers)
-                {
-                    req.Headers.Add(header.Key, header.Value);
-                }
-            }
+            LoadRequestHeaders(request, headerJar);
 
             string bodyAsString = null;
             if (contentType == ContentType.ApplicationJson && body != null)
@@ -531,8 +537,8 @@
 
             if (httpVerb != HttpVerb.Get.ToString().ToUpperInvariant() && !string.IsNullOrWhiteSpace(bodyAsString))
             {
-                req.ContentLength = bodyAsString.Length;
-                using (var requestWriter = new StreamWriter(req.GetRequestStream(), Encoding.ASCII))
+                request.ContentLength = bodyAsString.Length;
+                using (var requestWriter = new StreamWriter(request.GetRequestStream(), Encoding.ASCII))
                 {
                     requestWriter.Write(bodyAsString);
                     requestWriter.Close();
@@ -541,7 +547,7 @@
 
             string contents = null;
             WebHeaderCollection responseHeadersRaw;
-            using (var resp = req.GetResponse())
+            using (var resp = request.GetResponse())
             {
                 responseHeadersRaw = resp.Headers;
 
@@ -564,6 +570,10 @@
             {
                 ret = serializer.Deserialize<TResult>(contents);
             }
+            else if (acceptType == ContentType.TextPlain)
+            {
+                ret = contents as TResult;
+            }
             else
             {
                 throw new ArgumentException("AcceptType: " + acceptType + " not supported at this time.", nameof(acceptType));
@@ -578,6 +588,19 @@
             return ret;
         }
 
+        private static void LoadRequestHeaders(HttpWebRequest request, HeaderJar headerJar)
+        {
+            new { request }.Must().NotBeNull().OrThrowFirstFailure();
+
+            if (headerJar?.Headers != null)
+            {
+                foreach (var header in headerJar.Headers)
+                {
+                    request.Headers.Add(header.Key, header.Value);
+                }
+            }
+        }
+
         /// <summary>
         /// Convert the enumeration value of Content Type to the appropriate string value.
         /// </summary>
@@ -589,6 +612,8 @@
             {
                 case ContentType.ApplicationJson:
                     return "application/json";
+                case ContentType.TextPlain:
+                    return "text/plain";
                 default:
                     throw new ArgumentException("Unsupported content type: " + contentType, nameof(contentType));
             }
@@ -616,7 +641,7 @@
         /// </summary>
         /// <typeparam name="TResult">Type to convert the response to.</typeparam>
         /// <returns>Converted output from the call.</returns>
-        TResult Get<TResult>();
+        TResult Get<TResult>() where TResult : class;
 
         /// <summary>
         /// Executes the chain as a POST without a response.
@@ -628,7 +653,7 @@
         /// </summary>
         /// <typeparam name="TResult">Type to convert the response to.</typeparam>
         /// <returns>Converted output from the call.</returns>
-        TResult Post<TResult>();
+        TResult Post<TResult>() where TResult : class;
 
         /// <summary>
         /// Executes the chain as a PUT without a response.
@@ -640,7 +665,7 @@
         /// </summary>
         /// <typeparam name="TResult">Type to convert the response to.</typeparam>
         /// <returns>Converted output from the call.</returns>
-        TResult Put<TResult>();
+        TResult Put<TResult>() where TResult : class;
 
         /// <summary>
         /// Executes the chain as a DELETE without a response.
@@ -652,7 +677,7 @@
         /// </summary>
         /// <typeparam name="TResult">Type to convert the response to.</typeparam>
         /// <returns>Converted output from the call.</returns>
-        TResult Delete<TResult>();
+        TResult Delete<TResult>() where TResult : class;
 
         /// <summary>
         /// Executes the chain using the specified verb without a response.
@@ -666,7 +691,45 @@
         /// <param name="httpVerb">Specified HTTP verb to use.</param>
         /// <typeparam name="TResult">Type to convert the response to.</typeparam>
         /// <returns>Converted output from the call.</returns>
-        TResult CallWithVerb<TResult>(string httpVerb);
+        TResult CallWithVerb<TResult>(string httpVerb) where TResult : class;
+    }
+
+    /// <summary>
+    /// Interface of the call for just the accept type.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("Naos.Recipes.FluentUri", "See package version number")]
+#if NaosFluentUri
+    public
+#else
+    internal
+#endif
+        interface ICallOnUriAcceptType
+    {
+        /// <summary>
+        /// Updates the accept type of the call.
+        /// </summary>
+        /// <param name="acceptType">Accept type to use.</param>
+        /// <returns>Updated fluent grammar chain.</returns>
+        ICallOnUriAll WithAcceptType(ContentType acceptType);
+    }
+
+    /// <summary>
+    /// Interface of the call for just the content type.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCode("Naos.Recipes.FluentUri", "See package version number")]
+#if NaosFluentUri
+    public
+#else
+    internal
+#endif
+        interface ICallOnUriContentType
+    {
+        /// <summary>
+        /// Updates the content type of the call.
+        /// </summary>
+        /// <param name="contentType">Content type to use.</param>
+        /// <returns>Updated fluent grammar chain.</returns>
+        ICallOnUriAll WithContentType(ContentType contentType);
     }
 
     /// <summary>
@@ -821,7 +884,7 @@
 #else
     internal
 #endif
-        interface ICallOnUriAll : ICallOnUriHeaders, ICallOnUriCookie, ICallOnUriTimeout, ICallOnUriBody, ICallOnUriResponseHeaderSaveAction, ICallOnUriVerb, ICallOnUriSerializer
+        interface ICallOnUriAll : ICallOnUriHeaders, ICallOnUriCookie, ICallOnUriTimeout, ICallOnUriBody, ICallOnUriResponseHeaderSaveAction, ICallOnUriVerb, ICallOnUriSerializer, ICallOnUriAcceptType, ICallOnUriContentType
     {
     }
 
@@ -851,6 +914,10 @@
 
         private IStringSerializeAndDeserialize serializerForPostBodyAndResponse = new NaosJsonSerializer();
 
+        private ContentType acceptTypeForCall = ContentType.ApplicationJson;
+
+        private ContentType contentTypeForCall = ContentType.ApplicationJson;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ImplementationForICallOnUriAll"/> class.
         /// </summary>
@@ -861,6 +928,20 @@
 
             this.uri = uri;
             this.timeout = TimeSpan.FromSeconds(30);
+        }
+
+        /// <inheritdoc />
+        public ICallOnUriAll WithAcceptType(ContentType acceptType)
+        {
+            this.acceptTypeForCall = acceptType;
+            return this;
+        }
+
+        /// <inheritdoc />
+        public ICallOnUriAll WithContentType(ContentType contentType)
+        {
+            this.contentTypeForCall = contentType;
+            return this;
         }
 
         /// <inheritdoc />
@@ -966,26 +1047,26 @@
                 HttpVerb.Get,
                 this.body,
                 this.cookieJar,
-                this.headerJar.Headers,
+                this.headerJar,
                 this.saveResponseHeadersAction,
-                ContentType.ApplicationJson,
-                ContentType.ApplicationJson,
+                this.contentTypeForCall,
+                this.acceptTypeForCall,
                 this.timeout,
                 this.serializerForPostBodyAndResponse);
         }
 
         /// <inheritdoc />
-        public TResult Get<TResult>()
+        public TResult Get<TResult>() where TResult : class
         {
             return Operator.Call<TResult>(
                 this.uri,
                 HttpVerb.Get,
                 this.body,
                 this.cookieJar,
-                this.headerJar.Headers,
+                this.headerJar,
                 this.saveResponseHeadersAction,
-                ContentType.ApplicationJson,
-                ContentType.ApplicationJson,
+                this.contentTypeForCall,
+                this.acceptTypeForCall,
                 this.timeout,
                 this.serializerForPostBodyAndResponse);
         }
@@ -998,26 +1079,26 @@
                 HttpVerb.Post,
                 this.body,
                 this.cookieJar,
-                this.headerJar.Headers,
+                this.headerJar,
                 this.saveResponseHeadersAction,
-                ContentType.ApplicationJson,
-                ContentType.ApplicationJson,
+                this.contentTypeForCall,
+                this.acceptTypeForCall,
                 this.timeout,
                 this.serializerForPostBodyAndResponse);
         }
 
         /// <inheritdoc />
-        public TResult Post<TResult>()
+        public TResult Post<TResult>() where TResult : class
         {
             return Operator.Call<TResult>(
                 this.uri,
                 HttpVerb.Post,
                 this.body,
                 this.cookieJar,
-                this.headerJar.Headers,
+                this.headerJar,
                 this.saveResponseHeadersAction,
-                ContentType.ApplicationJson,
-                ContentType.ApplicationJson,
+                this.contentTypeForCall,
+                this.acceptTypeForCall,
                 this.timeout,
                 this.serializerForPostBodyAndResponse);
         }
@@ -1030,26 +1111,26 @@
                 HttpVerb.Put,
                 this.body,
                 this.cookieJar,
-                this.headerJar.Headers,
+                this.headerJar,
                 this.saveResponseHeadersAction,
-                ContentType.ApplicationJson,
-                ContentType.ApplicationJson,
+                this.contentTypeForCall,
+                this.acceptTypeForCall,
                 this.timeout,
                 this.serializerForPostBodyAndResponse);
         }
 
         /// <inheritdoc />
-        public TResult Put<TResult>()
+        public TResult Put<TResult>() where TResult : class
         {
             return Operator.Call<TResult>(
                 this.uri,
                 HttpVerb.Put,
                 this.body,
                 this.cookieJar,
-                this.headerJar.Headers,
+                this.headerJar,
                 this.saveResponseHeadersAction,
-                ContentType.ApplicationJson,
-                ContentType.ApplicationJson,
+                this.contentTypeForCall,
+                this.acceptTypeForCall,
                 this.timeout,
                 this.serializerForPostBodyAndResponse);
         }
@@ -1062,26 +1143,26 @@
                 HttpVerb.Delete,
                 this.body,
                 this.cookieJar,
-                this.headerJar.Headers,
+                this.headerJar,
                 this.saveResponseHeadersAction,
-                ContentType.ApplicationJson,
-                ContentType.ApplicationJson,
+                this.contentTypeForCall,
+                this.acceptTypeForCall,
                 this.timeout,
                 this.serializerForPostBodyAndResponse);
         }
 
         /// <inheritdoc />
-        public TResult Delete<TResult>()
+        public TResult Delete<TResult>() where TResult : class
         {
             return Operator.Call<TResult>(
                 this.uri,
                 HttpVerb.Delete,
                 this.body,
                 this.cookieJar,
-                this.headerJar.Headers,
+                this.headerJar,
                 this.saveResponseHeadersAction,
-                ContentType.ApplicationJson,
-                ContentType.ApplicationJson,
+                this.contentTypeForCall,
+                this.acceptTypeForCall,
                 this.timeout,
                 this.serializerForPostBodyAndResponse);
         }
@@ -1096,16 +1177,16 @@
                 httpVerb,
                 this.body,
                 this.cookieJar,
-                this.headerJar.Headers,
+                this.headerJar,
                 this.saveResponseHeadersAction,
-                ContentType.ApplicationJson,
-                ContentType.ApplicationJson,
+                this.contentTypeForCall,
+                this.acceptTypeForCall,
                 this.timeout,
                 this.serializerForPostBodyAndResponse);
         }
 
         /// <inheritdoc />
-        public TResult CallWithVerb<TResult>(string httpVerb)
+        public TResult CallWithVerb<TResult>(string httpVerb) where TResult : class
         {
             new { httpVerb }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
 
@@ -1114,10 +1195,10 @@
                 httpVerb,
                 this.body,
                 this.cookieJar,
-                this.headerJar.Headers,
+                this.headerJar,
                 this.saveResponseHeadersAction,
-                ContentType.ApplicationJson,
-                ContentType.ApplicationJson,
+                this.contentTypeForCall,
+                this.acceptTypeForCall,
                 this.timeout,
                 this.serializerForPostBodyAndResponse);
         }
@@ -1387,7 +1468,7 @@
         /// <param name="uri">Uri (extension method variable) to use for chain.</param>
         /// <typeparam name="TResult">Type to convert the response to.</typeparam>
         /// <returns>Converted output from the call.</returns>
-        public static TResult Get<TResult>(this Uri uri)
+        public static TResult Get<TResult>(this Uri uri) where TResult : class
         {
             return new ImplementationForICallOnUriAll(uri).Get<TResult>();
         }
@@ -1407,7 +1488,7 @@
         /// <param name="uri">Uri (extension method variable) to use for chain.</param>
         /// <typeparam name="TResult">Type to convert the response to.</typeparam>
         /// <returns>Converted output from the call.</returns>
-        public static TResult Post<TResult>(this Uri uri)
+        public static TResult Post<TResult>(this Uri uri) where TResult : class
         {
             return new ImplementationForICallOnUriAll(uri).Post<TResult>();
         }
@@ -1427,7 +1508,7 @@
         /// <param name="uri">Uri (extension method variable) to use for chain.</param>
         /// <typeparam name="TResult">Type to convert the response to.</typeparam>
         /// <returns>Converted output from the call.</returns>
-        public static TResult Put<TResult>(this Uri uri)
+        public static TResult Put<TResult>(this Uri uri) where TResult : class
         {
             return new ImplementationForICallOnUriAll(uri).Put<TResult>();
         }
@@ -1447,7 +1528,7 @@
         /// <param name="uri">Uri (extension method variable) to use for chain.</param>
         /// <typeparam name="TResult">Type to convert the response to.</typeparam>
         /// <returns>Converted output from the call.</returns>
-        public static TResult Delete<TResult>(this Uri uri)
+        public static TResult Delete<TResult>(this Uri uri) where TResult : class
         {
             return new ImplementationForICallOnUriAll(uri).Delete<TResult>();
         }
@@ -1469,7 +1550,7 @@
         /// <param name="httpVerb">Specified HTTP verb to use.</param>
         /// <typeparam name="TResult">Type to convert the response to.</typeparam>
         /// <returns>Converted output from the call.</returns>
-        public static TResult CallWithVerb<TResult>(this Uri uri, string httpVerb)
+        public static TResult CallWithVerb<TResult>(this Uri uri, string httpVerb) where TResult : class
         {
             return new ImplementationForICallOnUriAll(uri).CallWithVerb<TResult>(httpVerb);
         }
