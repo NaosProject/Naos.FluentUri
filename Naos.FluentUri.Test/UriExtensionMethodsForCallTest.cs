@@ -14,7 +14,7 @@ namespace Naos.FluentUri.Test
     using System.Reflection;
     using System.Web;
 
-    using Naos.FluentUri;
+    using Naos.Recipes.FluentUri;
 
     using Xunit;
 

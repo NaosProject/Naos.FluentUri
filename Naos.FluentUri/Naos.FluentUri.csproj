@@ -75,7 +75,6 @@
     <None Include="Naos.FluentUri.recipe-nuspec" />
     <None Include="Naos.FluentUri.override-nuspec" />
     <None Include="packages.config" />
-    <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta004\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
