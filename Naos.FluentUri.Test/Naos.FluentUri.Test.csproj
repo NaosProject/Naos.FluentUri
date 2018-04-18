@@ -59,17 +59,17 @@
     <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Naos.FluentUri\Naos.FluentUri.csproj">
-      <Project>{fd3ae445-8b29-4929-8f7b-2ab0ab13decc}</Project>
-      <Name>Naos.FluentUri</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta004\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta004\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".analyzers\dictionary.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Naos.FluentUri\Naos.FluentUri.csproj">
+      <Project>{fd3ae445-8b29-4929-8f7b-2ab0ab13decc}</Project>
+      <Name>Naos.FluentUri</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Naos.Build.Analyzers.1.51.0-dealwithstylecopbeta\build\Naos.Build.Analyzers.targets" Condition="Exists('..\packages\Naos.Build.Analyzers.1.51.0-dealwithstylecopbeta\build\Naos.Build.Analyzers.targets')" />
