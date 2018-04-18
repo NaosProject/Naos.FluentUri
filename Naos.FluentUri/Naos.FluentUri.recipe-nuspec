@@ -1,0 +1,19 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Naos.Recipes.FluentUri</id>
+    <description>A recipe (compile in C# file instead of DLL reference) version of Naos.FluentUri, a fluent grammar on top of the .NET Uri object for building up the Uri of a RESTful service and calling it with the appropriate information.</description>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Web" targetFramework=".NETFramework4.6.1" />
+    </frameworkAssemblies>
+    <dependencies>
+      <group targetFramework="net461">
+        <dependency id="Naos.Serialization.Json" version="1.0.0.1" />
+        <dependency id="Spritely.Recipes.MustValidation" version="0.6.3" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="Naos.FluentUri.cs" target="content/net45/.recipes/Naos.FluentUri/Naos.FluentUr.cs" />
+  </files>
+</package>

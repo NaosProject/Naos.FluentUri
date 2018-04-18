@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UriExtensionMethodsForCallTest.cs" company="Naos">
-//   Copyright 2015 Naos
+//    Copyright (c) Naos 2017. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -16,10 +16,9 @@ namespace Naos.FluentUri.Test
 
     using Xunit;
 
-    public class UriExtensionMethodsForCallTest
+    public static class UriExtensionMethodsForCallTest
     {
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void CallWithCookie_NetCookie_CookieIsSent()
         {
             // arrange
@@ -29,7 +28,7 @@ namespace Naos.FluentUri.Test
                              {
                                  Path = "/",
                                  Domain = "httpbin.org",
-                                 Expires = DateTime.Now.AddDays(11)
+                                 Expires = DateTime.Now.AddDays(11),
                              };
 
             var expectedCookieValue = cookie.Value;
@@ -46,7 +45,6 @@ namespace Naos.FluentUri.Test
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void CallWithCookieTwice_NetCookie_CookieIsSent()
         {
             // arrange
@@ -55,14 +53,14 @@ namespace Naos.FluentUri.Test
                              {
                                  Path = "/",
                                  Domain = "httpbin.org",
-                                 Expires = DateTime.Now.AddDays(11)
+                                 Expires = DateTime.Now.AddDays(11),
                              };
 
             var cookieTwo = new Cookie("MyCookie2", "Whatsup")
                              {
                                  Path = "/",
                                  Domain = "httpbin.org",
-                                 Expires = DateTime.Now.AddDays(11)
+                                 Expires = DateTime.Now.AddDays(11),
                              };
 
             // act
@@ -81,7 +79,6 @@ namespace Naos.FluentUri.Test
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void CallWithCookie_WebHttpCookie_CookieIsSent()
         {
             // arrange
@@ -91,7 +88,7 @@ namespace Naos.FluentUri.Test
                              {
                                  Path = "/",
                                  Domain = "httpbin.org",
-                                 Expires = DateTime.Now.AddDays(11)
+                                 Expires = DateTime.Now.AddDays(11),
                              };
 
             var expectedCookieValue = cookie.Value;
@@ -108,7 +105,6 @@ namespace Naos.FluentUri.Test
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void CallWithHeaders_NameValueCollection_HeadersAreSent()
         {
             // arrange
@@ -130,7 +126,6 @@ namespace Naos.FluentUri.Test
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void CallWithHeaders_WebHeaderCollection_HeadersAreSent()
         {
             // arrange
@@ -152,7 +147,6 @@ namespace Naos.FluentUri.Test
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void CallWithHeader_ValidData_HeadersAreSent()
         {
             // arrange
@@ -172,7 +166,6 @@ namespace Naos.FluentUri.Test
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void CallWithHeadersTwice_KeyValuePairArray_HeadersAreSent()
         {
             // arrange
@@ -198,11 +191,10 @@ namespace Naos.FluentUri.Test
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void CallWithTimeout_ShortTimeout_ExceptionThrown()
         {
             // arrange
-            var timeout = TimeSpan.FromTicks(1); // using this crazy short timeout to guarantee a failure. 
+            var timeout = TimeSpan.FromTicks(1); // using this crazy short timeout to guarantee a failure.
             var url = "http://httpbin.org/ip";
 
             // act
@@ -220,7 +212,6 @@ namespace Naos.FluentUri.Test
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void Call_BasicGet_ValidResponse()
         {
             // arrange
@@ -238,7 +229,6 @@ namespace Naos.FluentUri.Test
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void Call_BasicPost_ValidResponse()
         {
             // arrange
@@ -250,12 +240,11 @@ namespace Naos.FluentUri.Test
 
             // assert
             Assert.NotNull(result);
-            Assert.Equal(body.Key, result.json.Key.ToString());
-            Assert.Equal(body.Value, result.json.Value.ToString());
+            Assert.Equal(body.Key, result.json.key.ToString());
+            Assert.Equal(body.Value, result.json.value.ToString());
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void Call_BasicPut_ValidResponse()
         {
             // arrange
@@ -267,12 +256,11 @@ namespace Naos.FluentUri.Test
 
             // assert
             Assert.NotNull(result);
-            Assert.Equal(body.Key, result.json.Key.ToString());
-            Assert.Equal(body.Value, result.json.Value.ToString());
+            Assert.Equal(body.Key, result.json.key.ToString());
+            Assert.Equal(body.Value, result.json.value.ToString());
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void Call_BasicDelete_ValidResponse()
         {
             // arrange
@@ -284,12 +272,11 @@ namespace Naos.FluentUri.Test
 
             // assert
             Assert.NotNull(result);
-            Assert.Equal(body.Key, result.json.Key.ToString());
-            Assert.Equal(body.Value, result.json.Value.ToString());
+            Assert.Equal(body.Key, result.json.key.ToString());
+            Assert.Equal(body.Value, result.json.value.ToString());
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void Call_CustomVerb_ValidResponse()
         {
             // arrange
@@ -301,12 +288,11 @@ namespace Naos.FluentUri.Test
 
             // assert
             Assert.NotNull(result);
-            Assert.Equal(body.Key, result.json.Key.ToString());
-            Assert.Equal(body.Value, result.json.Value.ToString());
+            Assert.Equal(body.Key, result.json.key.ToString());
+            Assert.Equal(body.Value, result.json.value.ToString());
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void Call_WithBodyTwice_ThrowsException()
         {
             // arrange
@@ -318,7 +304,6 @@ namespace Naos.FluentUri.Test
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void Call_WithTimeoutTwice_ThrowsException()
         {
             // arrange
@@ -326,11 +311,10 @@ namespace Naos.FluentUri.Test
 
             // act/assert
             Assert.Throws<DuplicateCallUsingFluentGrammarException>(
-                delegate { new Uri(url).WithTimeout(new TimeSpan()).WithTimeout(new TimeSpan()).Get(); });
+                delegate { new Uri(url).WithTimeout(TimeSpan.Zero).WithTimeout(TimeSpan.Zero).Get(); });
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void Call_ReturnsResponseHeaders_ResponseHeadersCaptured()
         {
             // arrange
@@ -341,11 +325,11 @@ namespace Naos.FluentUri.Test
             var result = new Uri(url).WithResponseHeaderSaveAction(_ => outputHeaders = _).Get<dynamic>();
 
             // assert
+            Assert.NotNull(result);
             Assert.NotEqual(0, outputHeaders.Length);
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void ExtensionMethodsMatchICallUriAll()
         {
             // since they can't share an interface we need to confirm that the methods are the same for consistent experience...
@@ -361,7 +345,7 @@ namespace Naos.FluentUri.Test
             }
 
             var removeOnesToNotCompare = new Func<List<MethodInfo>, List<MethodInfo>>(
-                delegate(List<MethodInfo> list)
+                list =>
                     {
                         var methodsToSkip = new List<string>(new[] { "ToString", "Equals", "GetHashCode", "GetType" });
                         return list.Where(methodInfo => !methodsToSkip.Contains(methodInfo.Name)).ToList();

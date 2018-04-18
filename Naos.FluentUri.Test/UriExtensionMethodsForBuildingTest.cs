@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="UriExtensionMethodsForBuildingTest.cs" company="Naos">
-//   Copyright 2015 Naos
+//    Copyright (c) Naos 2017. All Rights Reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -8,19 +8,15 @@ namespace Naos.FluentUri.Test
 {
     using System;
     using System.Collections.Generic;
-    using System.Web;
-
-    using Newtonsoft.Json;
 
     using Xunit;
 
     /// <summary>
     /// Tests for the URL building methods.
     /// </summary>
-    public class UriExtensionMethodsForBuildingTest
+    public static class UriExtensionMethodsForBuildingTest
     {
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void AppendPathSegment_ValidUrlNoTrailingSlashAppendedWithSegment_ValidlyAppendedResult()
         {
             // arrange
@@ -38,7 +34,6 @@ namespace Naos.FluentUri.Test
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void AppendPathSegment_ValidUrlNoTrailingSlashAppendedWithSegmentTwice_ValidlyAppendedResult()
         {
             // arrange
@@ -57,7 +52,6 @@ namespace Naos.FluentUri.Test
         }
 
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void AppendPathSegment_ValidUrlTrailingSlashAppendedWithSegment_ValidlyAppendedResult()
         {
             // arrange
@@ -74,8 +68,8 @@ namespace Naos.FluentUri.Test
             Assert.Equal(expectedAbsoluteUri, actualAbsoluteUri);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Param", Justification = "Name/spelling is correct.")]
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void AppendQueryStringParam_ValidUrlAppendedWithQueryStringParamStringTwice_ValidlyAppendedResult()
         {
             // arrange
@@ -99,8 +93,8 @@ namespace Naos.FluentUri.Test
             Assert.Equal(expectedAbsoluteUri, actualAbsoluteUri);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Param", Justification = "Name/spelling is correct.")]
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void AppendQueryStringParam_ValidUrlAppendedWithQueryStringParam_ValidlyAppendedResult()
         {
             // arrange
@@ -119,8 +113,8 @@ namespace Naos.FluentUri.Test
             Assert.Equal(expectedAbsoluteUri, actualAbsoluteUri);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Params", Justification = "Name/spelling is correct.")]
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void AppendQueryStringParams_ValidUrlAppendedWithQueryStringParamsList_ValidlyAppendedResult()
         {
             // arrange
@@ -148,8 +142,8 @@ namespace Naos.FluentUri.Test
             Assert.Equal(expectedAbsoluteUri, actualAbsoluteUri);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Params", Justification = "Name/spelling is correct.")]
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void AppendQueryStringParams_ValidUrlAppendedWithQueryStringParamsDictionary_ValidlyAppendedResult()
         {
             // arrange
@@ -177,8 +171,8 @@ namespace Naos.FluentUri.Test
             Assert.Equal(expectedAbsoluteUri, actualAbsoluteUri);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Param", Justification = "Name/spelling is correct.")]
         [Fact]
-        // ReSharper disable once InconsistentNaming
         public static void AppendPathSegmentThenAppendQueryStringParamTheAppendPathSegment_ValidUrlOperations_ValidlyAppendedResult()
         {
             // arrange
