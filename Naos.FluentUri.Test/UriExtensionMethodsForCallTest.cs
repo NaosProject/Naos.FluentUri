@@ -14,6 +14,8 @@ namespace Naos.FluentUri.Test
     using System.Reflection;
     using System.Web;
 
+    using Naos.FluentUri;
+
     using Xunit;
 
     public static class UriExtensionMethodsForCallTest
