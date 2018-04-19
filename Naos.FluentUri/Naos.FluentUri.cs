@@ -1343,6 +1343,28 @@ namespace Naos.FluentUri
         static class UriExtensionMethodsForCall
     {
         /// <summary>
+        /// Updates the accept type of the call.
+        /// </summary>
+        /// <param name="uri">Uri (extension method variable) to use for chain.</param>
+        /// <param name="acceptType">Accept type to use.</param>
+        /// <returns>Updated fluent grammar chain.</returns>
+        public static ICallOnUriAll WithAcceptType(this Uri uri, ContentType acceptType)
+        {
+            return new ImplementationForICallOnUriAll(uri).WithAcceptType(acceptType);
+        }
+
+        /// <summary>
+        /// Updates the content type of the call.
+        /// </summary>
+        /// <param name="uri">Uri (extension method variable) to use for chain.</param>
+        /// <param name="contentType">Content type to use.</param>
+        /// <returns>Updated fluent grammar chain.</returns>
+        public static ICallOnUriAll WithContentType(this Uri uri, ContentType contentType)
+        {
+            return new ImplementationForICallOnUriAll(uri).WithContentType(contentType);
+        }
+
+        /// <summary>
         /// Update the serializer for the call.
         /// </summary>
         /// <param name="uri">Uri (extension method variable) to use for chain.</param>
