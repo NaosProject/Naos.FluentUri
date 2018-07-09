@@ -26,7 +26,7 @@ namespace Naos.FluentUri
     using Naos.Serialization.Domain;
     using Naos.Serialization.Json;
 
-    using Spritely.Recipes;
+    using OBeautifulCode.Validation.Recipes;
 
     using static System.FormattableString;
 
@@ -168,7 +168,7 @@ namespace Naos.FluentUri
         /// <returns>Translated Cookie.</returns>
         public static Cookie ToSystemNetCookie(this HttpCookie cookie)
         {
-            new { cookie }.Must().NotBeNull().OrThrow();
+            new { cookie }.Must().NotBeNull();
 
             var ret = new Cookie
             {
@@ -190,7 +190,7 @@ namespace Naos.FluentUri
         /// <returns>Translated HttpCookie.</returns>
         public static HttpCookie ToSystemWebHttpCookie(this Cookie cookie)
         {
-            new { cookie }.Must().NotBeNull().OrThrow();
+            new { cookie }.Must().NotBeNull();
 
             var ret = new HttpCookie(cookie.Name)
             {
@@ -232,7 +232,7 @@ namespace Naos.FluentUri
         /// <param name="cookie">Cookie to add to request.</param>
         public void AddCookie(Cookie cookie)
         {
-            new { cookie }.Must().NotBeNull().OrThrow();
+            new { cookie }.Must().NotBeNull();
 
             this.cookies.Add(cookie);
         }
@@ -243,7 +243,7 @@ namespace Naos.FluentUri
         /// <param name="cookie">Cookie to add to request.</param>
         public void AddCookie(HttpCookie cookie)
         {
-            new { cookie }.Must().NotBeNull().OrThrow();
+            new { cookie }.Must().NotBeNull();
 
             this.cookies.Add(cookie.ToSystemNetCookie());
         }
@@ -366,7 +366,7 @@ namespace Naos.FluentUri
         /// <param name="headers">Headers to add to set.</param>
         public void Add(NameValueCollection headers)
         {
-            new { headers }.Must().NotBeNull().OrThrow();
+            new { headers }.Must().NotBeNull();
 
             var transformedHeaders = headers.ToKeyValuePairArray();
             this.headerCollection.AddRange(transformedHeaders);
@@ -378,7 +378,7 @@ namespace Naos.FluentUri
         /// <param name="headers">Headers to add to set.</param>
         public void Add(WebHeaderCollection headers)
         {
-            new { headers }.Must().NotBeNull().OrThrow();
+            new { headers }.Must().NotBeNull();
 
             var transformedHeaders = headers.ToKeyValuePairArray();
             this.headerCollection.AddRange(transformedHeaders);
@@ -390,7 +390,7 @@ namespace Naos.FluentUri
         /// <param name="headers">Headers to add to set.</param>
         public void Add(KeyValuePair<string, string>[] headers)
         {
-            new { headers }.Must().NotBeNull().OrThrow();
+            new { headers }.Must().NotBeNull();
 
             this.headerCollection.AddRange(headers);
         }
@@ -402,8 +402,8 @@ namespace Naos.FluentUri
         /// <param name="value">Value of header to add to set.</param>
         public void Add(string name, string value)
         {
-            new { name }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
-            new { value }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
+            new { name }.Must().NotBeNullNorWhiteSpace();
+            new { value }.Must().NotBeNullNorWhiteSpace();
 
             this.headerCollection.Add(new KeyValuePair<string, string>(name, value));
         }
@@ -489,9 +489,9 @@ namespace Naos.FluentUri
             TimeSpan timeout,
             IStringSerializeAndDeserialize serializer) where TResult : class
         {
-            new { uri }.Must().NotBeNull().OrThrow();
-            new { httpVerb }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
-            new { serializer }.Must().NotBeNull().OrThrow();
+            new { uri }.Must().NotBeNull();
+            new { httpVerb }.Must().NotBeNullNorWhiteSpace();
+            new { serializer }.Must().NotBeNull();
 
             if (acceptType == ContentType.TextPlain && typeof(TResult) != typeof(string))
             {
@@ -590,7 +590,7 @@ namespace Naos.FluentUri
 
         private static void LoadRequestHeaders(HttpWebRequest request, HeaderJar headerJar)
         {
-            new { request }.Must().NotBeNull().OrThrowFirstFailure();
+            new { request }.Must().NotBeNull();
 
             if (headerJar?.Headers != null)
             {
@@ -924,7 +924,7 @@ namespace Naos.FluentUri
         /// <param name="uri">Uri of the call.</param>
         public ImplementationForICallOnUriAll(Uri uri)
         {
-            new { uri }.Must().NotBeNull().OrThrow();
+            new { uri }.Must().NotBeNull();
 
             this.uri = uri;
             this.timeout = TimeSpan.FromSeconds(30);
@@ -947,7 +947,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithSerializer(IStringSerializeAndDeserialize serializer)
         {
-            new { serializer }.Must().NotBeNull().OrThrow();
+            new { serializer }.Must().NotBeNull();
 
             this.UpdateCallListThrowIfAlreadyCalled(nameof(this.WithSerializer));
 
@@ -967,8 +967,8 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithHeader(string name, string value)
         {
-            new { name }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
-            new { value }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
+            new { name }.Must().NotBeNullNorWhiteSpace();
+            new { value }.Must().NotBeNullNorWhiteSpace();
 
             this.headerJar.Add(name, value);
             return this;
@@ -977,7 +977,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithHeaders(NameValueCollection headers)
         {
-            new { headers }.Must().NotBeNull().OrThrow();
+            new { headers }.Must().NotBeNull();
 
             this.headerJar.Add(headers);
             return this;
@@ -986,7 +986,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithHeaders(WebHeaderCollection headers)
         {
-            new { headers }.Must().NotBeNull().OrThrow();
+            new { headers }.Must().NotBeNull();
 
             this.headerJar.Add(headers);
             return this;
@@ -995,7 +995,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithHeaders(KeyValuePair<string, string>[] headers)
         {
-            new { headers }.Must().NotBeNull().OrThrow();
+            new { headers }.Must().NotBeNull();
 
             this.headerJar.Add(headers);
             return this;
@@ -1004,7 +1004,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithCookie(Cookie cookie)
         {
-            new { cookie }.Must().NotBeNull().OrThrow();
+            new { cookie }.Must().NotBeNull();
 
             this.cookieJar.AddCookie(cookie);
             return this;
@@ -1013,7 +1013,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithCookie(HttpCookie cookie)
         {
-            new { cookie }.Must().NotBeNull().OrThrow();
+            new { cookie }.Must().NotBeNull();
 
             this.cookieJar.AddCookie(cookie);
             return this;
@@ -1031,7 +1031,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithResponseHeaderSaveAction(Action<KeyValuePair<string, string>[]> saveAction)
         {
-            new { saveAction }.Must().NotBeNull().OrThrow();
+            new { saveAction }.Must().NotBeNull();
 
             this.UpdateCallListThrowIfAlreadyCalled(nameof(this.WithResponseHeaderSaveAction));
 
@@ -1170,7 +1170,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public void CallWithVerb(string httpVerb)
         {
-            new { httpVerb }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
+            new { httpVerb }.Must().NotBeNullNorWhiteSpace();
 
             Operator.Call<VoidResultType>(
                 this.uri,
@@ -1188,7 +1188,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public TResult CallWithVerb<TResult>(string httpVerb) where TResult : class
         {
-            new { httpVerb }.Must().NotBeNull().And().NotBeWhiteSpace().OrThrowFirstFailure();
+            new { httpVerb }.Must().NotBeNullNorWhiteSpace();
 
             return Operator.Call<TResult>(
                 this.uri,
@@ -1238,8 +1238,8 @@ namespace Naos.FluentUri
         /// <returns>New Uri with adjustments to the url.</returns>
         public static Uri AppendPathSegment(this Uri uri, string pathSegment)
         {
-            new { uri }.Must().NotBeNull().OrThrow();
-            new { pathSegment }.Must().NotBeNull().OrThrow();
+            new { uri }.Must().NotBeNull();
+            new { pathSegment }.Must().NotBeNull();
 
             var uriBuilder = new UriBuilder(uri);
 
@@ -1262,8 +1262,8 @@ namespace Naos.FluentUri
         /// <returns>New Uri with adjustments to the url.</returns>
         public static Uri AppendQueryStringParam(this Uri uri, string name, string value)
         {
-            new { uri }.Must().NotBeNull().OrThrow();
-            new { value }.Must().NotBeNull().OrThrow();
+            new { uri }.Must().NotBeNull();
+            new { value }.Must().NotBeNull();
 
             var list = new KeyValuePair<string, string>(name, value).ToSingleElementArray();
             return uri.AppendQueryStringParams(list);
@@ -1278,8 +1278,8 @@ namespace Naos.FluentUri
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Params", Justification = "Spelling/name is correct.")]
         public static Uri AppendQueryStringParams(this Uri uri, IDictionary<string, string> queryStringParams)
         {
-            new { uri }.Must().NotBeNull().OrThrow();
-            new { queryStringParams }.Must().NotBeNull().OrThrow();
+            new { uri }.Must().NotBeNull();
+            new { queryStringParams }.Must().NotBeNull();
 
             var list = queryStringParams.ToList();
             return uri.AppendQueryStringParams(list);
@@ -1294,8 +1294,8 @@ namespace Naos.FluentUri
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Params", Justification = "Spelling/name is correct.")]
         public static Uri AppendQueryStringParams(this Uri uri, ICollection<KeyValuePair<string, string>> queryStringParams)
         {
-            new { uri }.Must().NotBeNull().OrThrow();
-            new { queryStringParams }.Must().NotBeNull().OrThrow();
+            new { uri }.Must().NotBeNull();
+            new { queryStringParams }.Must().NotBeNull();
 
             var collection = HttpUtility.ParseQueryString(uri.Query);
 
