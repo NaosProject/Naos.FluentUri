@@ -66,9 +66,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Naos.FluentUri\Naos.FluentUri.cs">
-      <Link>Naos.FluentUri.cs</Link>
-    </Compile>
     <Compile Include=".recipes\OBeautifulCode.Validation\ApplyBecause.cs" />
     <Compile Include=".recipes\OBeautifulCode.Validation\DictionaryExtensions.cs" />
     <Compile Include=".recipes\OBeautifulCode.Validation\Parameter.cs" />
@@ -99,6 +96,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".analyzers\dictionary.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Naos.FluentUri\Naos.FluentUri.csproj">
+      <Project>{fd3ae445-8b29-4929-8f7b-2ab0ab13decc}</Project>
+      <Name>Naos.FluentUri</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Naos.Build.Analyzers.1.55.3\build\Naos.Build.Analyzers.targets" Condition="Exists('..\packages\Naos.Build.Analyzers.1.55.3\build\Naos.Build.Analyzers.targets')" />

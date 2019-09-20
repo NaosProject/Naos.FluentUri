@@ -9,7 +9,7 @@ namespace Naos.FluentUri.Test
     using System;
     using System.Collections.Generic;
 
-    using Naos.Recipes.FluentUri;
+    using Naos.FluentUri;
 
     using Xunit;
 
