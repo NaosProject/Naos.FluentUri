@@ -9,7 +9,7 @@ namespace Naos.FluentUri
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Net;
-    using OBeautifulCode.Validation.Recipes;
+    using OBeautifulCode.Assertion.Recipes;
 
     /// <summary>
     /// Container to hold different types of headers.
@@ -31,7 +31,7 @@ namespace Naos.FluentUri
         /// <param name="headers">Headers to add to set.</param>
         public void Add(NameValueCollection headers)
         {
-            new { headers }.Must().NotBeNull();
+            new { headers }.AsArg().Must().NotBeNull();
 
             var transformedHeaders = headers.ToKeyValuePairArray();
             this.headerCollection.AddRange(transformedHeaders);
@@ -43,7 +43,7 @@ namespace Naos.FluentUri
         /// <param name="headers">Headers to add to set.</param>
         public void Add(WebHeaderCollection headers)
         {
-            new { headers }.Must().NotBeNull();
+            new { headers }.AsArg().Must().NotBeNull();
 
             var transformedHeaders = headers.ToKeyValuePairArray();
             this.headerCollection.AddRange(transformedHeaders);
@@ -55,7 +55,7 @@ namespace Naos.FluentUri
         /// <param name="headers">Headers to add to set.</param>
         public void Add(KeyValuePair<string, string>[] headers)
         {
-            new { headers }.Must().NotBeNull();
+            new { headers }.AsArg().Must().NotBeNull();
 
             this.headerCollection.AddRange(headers);
         }
@@ -67,8 +67,8 @@ namespace Naos.FluentUri
         /// <param name="value">Value of header to add to set.</param>
         public void Add(string name, string value)
         {
-            new { name }.Must().NotBeNullNorWhiteSpace();
-            new { value }.Must().NotBeNullNorWhiteSpace();
+            new { name }.AsArg().Must().NotBeNullNorWhiteSpace();
+            new { value }.AsArg().Must().NotBeNullNorWhiteSpace();
 
             this.headerCollection.Add(new KeyValuePair<string, string>(name, value));
         }

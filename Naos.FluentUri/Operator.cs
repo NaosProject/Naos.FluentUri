@@ -11,11 +11,11 @@ namespace Naos.FluentUri
     using System.IO;
     using System.Net;
     using System.Text;
-    using Naos.Serialization.Domain;
-    using OBeautifulCode.Validation.Recipes;
+    using OBeautifulCode.Assertion.Recipes;
+    using OBeautifulCode.Serialization;
 
     /// <summary>
-    /// Methods to wrap WebRequest usage
+    /// Methods to wrap WebRequest usage.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Operator", Justification = "Spelling/name is correct.")]
     public static class Operator
@@ -84,7 +84,7 @@ namespace Naos.FluentUri
         /// or
         /// AcceptType: " + contentType + " not supported at this time. - acceptType
         /// or
-        /// AcceptType: " + acceptType + " not supported at this time. - acceptType
+        /// AcceptType: " + acceptType + " not supported at this time. - acceptType.
         /// </exception>
         public static TResult Call<TResult>(
             Uri                                    uri,
@@ -99,9 +99,9 @@ namespace Naos.FluentUri
             IStringSerializeAndDeserialize         serializer)
             where TResult : class
         {
-            new { uri }.Must().NotBeNull();
-            new { httpVerb }.Must().NotBeNullNorWhiteSpace();
-            new { serializer }.Must().NotBeNull();
+            new { uri }.AsArg().Must().NotBeNull();
+            new { httpVerb }.AsArg().Must().NotBeNullNorWhiteSpace();
+            new { serializer }.AsArg().Must().NotBeNull();
 
             if (acceptType == ContentType.TextPlain && typeof(TResult) != typeof(string))
             {
@@ -148,10 +148,13 @@ namespace Naos.FluentUri
             if (httpVerb != HttpVerb.Get.ToString().ToUpperInvariant() && !string.IsNullOrWhiteSpace(bodyAsString))
             {
                 request.ContentLength = bodyAsString.Length;
-                using (var requestWriter = new StreamWriter(request.GetRequestStream(), Encoding.ASCII))
+                using (var requestStream = request.GetRequestStream())
                 {
-                    requestWriter.Write(bodyAsString);
-                    requestWriter.Close();
+                    using (var requestWriter = new StreamWriter(requestStream, Encoding.ASCII))
+                    {
+                        requestWriter.Write(bodyAsString);
+                        requestWriter.Close();
+                    }
                 }
             }
 
@@ -200,7 +203,7 @@ namespace Naos.FluentUri
 
         private static void LoadRequestHeaders(HttpWebRequest request, HeaderJar headerJar)
         {
-            new { request }.Must().NotBeNull();
+            new { request }.AsArg().Must().NotBeNull();
 
             if (headerJar?.Headers != null)
             {
@@ -216,7 +219,7 @@ namespace Naos.FluentUri
         /// </summary>
         /// <param name="contentType">Enumeration content type.</param>
         /// <returns>Appropriate string value of the enumeration.</returns>
-        /// <exception cref="ArgumentException">Unsupported content type: " + contentType - contentType</exception>
+        /// <exception cref="ArgumentException">Unsupported content type: " + contentType - contentType.</exception>
         public static string ToStringValue(this ContentType contentType)
         {
             switch (contentType)

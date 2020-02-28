@@ -10,7 +10,7 @@ namespace Naos.FluentUri
 
     /// <summary>
     /// Exception object for duplicate calls in chain.
-    /// Implements the <see cref="Exception" />
+    /// Implements the <see cref="Exception" />.
     /// </summary>
     /// <seealso cref="Exception" />
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "CallUsing", Justification = "Spelling/name is correct.")]

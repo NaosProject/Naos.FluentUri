@@ -16,7 +16,7 @@ namespace Naos.FluentUri
     /// Implements the <see cref="Naos.FluentUri.ICallOnUriVerb" />
     /// Implements the <see cref="Naos.FluentUri.ICallOnUriSerializer" />
     /// Implements the <see cref="Naos.FluentUri.ICallOnUriAcceptType" />
-    /// Implements the <see cref="Naos.FluentUri.ICallOnUriContentType" />
+    /// Implements the <see cref="Naos.FluentUri.ICallOnUriContentType" />.
     /// </summary>
     /// <seealso cref="Naos.FluentUri.ICallOnUriHeaders" />
     /// <seealso cref="Naos.FluentUri.ICallOnUriCookie" />

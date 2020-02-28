@@ -301,8 +301,7 @@ namespace Naos.FluentUri.Test
             var url = "http://fakeUrl";
 
             // act/assert
-            Assert.Throws<DuplicateCallUsingFluentGrammarException>(
-                delegate { new Uri(url).WithBody(null).WithBody(null).Get(); });
+            Assert.Throws<DuplicateCallUsingFluentGrammarException>(() => new Uri(url).WithBody(null).WithBody(null).Get());
         }
 
         [Fact]
@@ -312,8 +311,7 @@ namespace Naos.FluentUri.Test
             var url = "http://fakeUrl";
 
             // act/assert
-            Assert.Throws<DuplicateCallUsingFluentGrammarException>(
-                delegate { new Uri(url).WithTimeout(TimeSpan.Zero).WithTimeout(TimeSpan.Zero).Get(); });
+            Assert.Throws<DuplicateCallUsingFluentGrammarException>(() => new Uri(url).WithTimeout(TimeSpan.Zero).WithTimeout(TimeSpan.Zero).Get());
         }
 
         [Fact]

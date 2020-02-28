@@ -12,7 +12,7 @@ namespace Naos.FluentUri
     using System.Net;
     using System.Web;
 
-    using Naos.Serialization.Domain;
+    using OBeautifulCode.Serialization;
 
     /// <summary>
     /// Class of extension methods on the Uri object.

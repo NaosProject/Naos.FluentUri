@@ -8,7 +8,7 @@ namespace Naos.FluentUri
 {
     using System.Net;
     using System.Web;
-    using OBeautifulCode.Validation.Recipes;
+    using OBeautifulCode.Assertion.Recipes;
 
     /// <summary>
     /// Extension methods to convert the two types of cookies.
@@ -22,7 +22,7 @@ namespace Naos.FluentUri
         /// <returns>Translated Cookie.</returns>
         public static Cookie ToSystemNetCookie(this HttpCookie cookie)
         {
-            new { cookie }.Must().NotBeNull();
+            new { cookie }.AsArg().Must().NotBeNull();
 
             var ret = new Cookie
                       {
@@ -44,7 +44,7 @@ namespace Naos.FluentUri
         /// <returns>Translated HttpCookie.</returns>
         public static HttpCookie ToSystemWebHttpCookie(this Cookie cookie)
         {
-            new { cookie }.Must().NotBeNull();
+            new { cookie }.AsArg().Must().NotBeNull();
 
             var ret = new HttpCookie(cookie.Name)
                       {

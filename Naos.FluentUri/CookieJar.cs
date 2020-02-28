@@ -9,7 +9,7 @@ namespace Naos.FluentUri
     using System.Collections.Generic;
     using System.Net;
     using System.Web;
-    using OBeautifulCode.Validation.Recipes;
+    using OBeautifulCode.Assertion.Recipes;
 
     /// <summary>
     /// Container to hold different types of cookies.
@@ -31,7 +31,7 @@ namespace Naos.FluentUri
         /// <param name="cookie">Cookie to add to request.</param>
         public void AddCookie(Cookie cookie)
         {
-            new { cookie }.Must().NotBeNull();
+            new { cookie }.AsArg().Must().NotBeNull();
 
             this.cookies.Add(cookie);
         }
@@ -42,7 +42,7 @@ namespace Naos.FluentUri
         /// <param name="cookie">Cookie to add to request.</param>
         public void AddCookie(HttpCookie cookie)
         {
-            new { cookie }.Must().NotBeNull();
+            new { cookie }.AsArg().Must().NotBeNull();
 
             this.cookies.Add(cookie.ToSystemNetCookie());
         }

@@ -11,13 +11,13 @@ namespace Naos.FluentUri
     using System.Collections.Specialized;
     using System.Net;
     using System.Web;
-    using Naos.Serialization.Domain;
-    using Naos.Serialization.Json;
-    using OBeautifulCode.Validation.Recipes;
+    using OBeautifulCode.Assertion.Recipes;
+    using OBeautifulCode.Serialization;
+    using OBeautifulCode.Serialization.Json;
 
     /// <summary>
     /// Class ImplementationForICallOnUriAll.
-    /// Implements the <see cref="Naos.FluentUri.ICallOnUriAll" />
+    /// Implements the <see cref="Naos.FluentUri.ICallOnUriAll" />.
     /// </summary>
     /// <seealso cref="Naos.FluentUri.ICallOnUriAll" />
     /// <inheritdoc />
@@ -37,7 +37,7 @@ namespace Naos.FluentUri
 
         private Action<KeyValuePair<string, string>[]> saveResponseHeadersAction;
 
-        private IStringSerializeAndDeserialize serializerForPostBodyAndResponse = new NaosJsonSerializer();
+        private IStringSerializeAndDeserialize serializerForPostBodyAndResponse = new ObcJsonSerializer();
 
         private ContentType acceptTypeForCall = ContentType.ApplicationJson;
 
@@ -49,7 +49,7 @@ namespace Naos.FluentUri
         /// <param name="uri">Uri of the call.</param>
         public ImplementationForICallOnUriAll(Uri uri)
         {
-            new { uri }.Must().NotBeNull();
+            new { uri }.AsArg().Must().NotBeNull();
 
             this.uri     = uri;
             this.internalTimeout = TimeSpan.FromSeconds(30);
@@ -87,7 +87,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithSerializer(IStringSerializeAndDeserialize serializer)
         {
-            new { serializer }.Must().NotBeNull();
+            new { serializer }.AsArg().Must().NotBeNull();
 
             this.UpdateCallListThrowIfAlreadyCalled(nameof(this.WithSerializer));
 
@@ -118,8 +118,8 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithHeader(string name, string value)
         {
-            new { name }.Must().NotBeNullNorWhiteSpace();
-            new { value }.Must().NotBeNullNorWhiteSpace();
+            new { name }.AsArg().Must().NotBeNullNorWhiteSpace();
+            new { value }.AsArg().Must().NotBeNullNorWhiteSpace();
 
             this.headerJar.Add(name, value);
             return this;
@@ -133,7 +133,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithHeaders(NameValueCollection headers)
         {
-            new { headers }.Must().NotBeNull();
+            new { headers }.AsArg().Must().NotBeNull();
 
             this.headerJar.Add(headers);
             return this;
@@ -147,7 +147,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithHeaders(WebHeaderCollection headers)
         {
-            new { headers }.Must().NotBeNull();
+            new { headers }.AsArg().Must().NotBeNull();
 
             this.headerJar.Add(headers);
             return this;
@@ -161,7 +161,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithHeaders(KeyValuePair<string, string>[] headers)
         {
-            new { headers }.Must().NotBeNull();
+            new { headers }.AsArg().Must().NotBeNull();
 
             this.headerJar.Add(headers);
             return this;
@@ -175,7 +175,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithCookie(Cookie cookie)
         {
-            new { cookie }.Must().NotBeNull();
+            new { cookie }.AsArg().Must().NotBeNull();
 
             this.cookieJar.AddCookie(cookie);
             return this;
@@ -189,7 +189,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithCookie(HttpCookie cookie)
         {
-            new { cookie }.Must().NotBeNull();
+            new { cookie }.AsArg().Must().NotBeNull();
 
             this.cookieJar.AddCookie(cookie);
             return this;
@@ -217,7 +217,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public ICallOnUriAll WithResponseHeaderSaveAction(Action<KeyValuePair<string, string>[]> saveAction)
         {
-            new { saveAction }.Must().NotBeNull();
+            new { saveAction }.AsArg().Must().NotBeNull();
 
             this.UpdateCallListThrowIfAlreadyCalled(nameof(this.WithResponseHeaderSaveAction));
 
@@ -396,7 +396,7 @@ namespace Naos.FluentUri
         /// <inheritdoc />
         public void CallWithVerb(string httpVerb)
         {
-            new { httpVerb }.Must().NotBeNullNorWhiteSpace();
+            new { httpVerb }.AsArg().Must().NotBeNullNorWhiteSpace();
 
             Operator.Call<VoidResultType>(
                 this.uri,
@@ -421,7 +421,7 @@ namespace Naos.FluentUri
         public TResult CallWithVerb<TResult>(string httpVerb)
             where TResult : class
         {
-            new { httpVerb }.Must().NotBeNullNorWhiteSpace();
+            new { httpVerb }.AsArg().Must().NotBeNullNorWhiteSpace();
 
             return Operator.Call<TResult>(
                 this.uri,

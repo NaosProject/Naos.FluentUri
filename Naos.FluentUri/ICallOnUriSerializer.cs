@@ -6,7 +6,7 @@
 
 namespace Naos.FluentUri
 {
-    using Naos.Serialization.Domain;
+    using OBeautifulCode.Serialization;
 
     /// <summary>
     /// Interface of the call for setting the serializer.

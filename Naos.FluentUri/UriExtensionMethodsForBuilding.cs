@@ -11,7 +11,7 @@ namespace Naos.FluentUri
     using System.Linq;
     using System.Text;
     using System.Web;
-    using OBeautifulCode.Validation.Recipes;
+    using OBeautifulCode.Assertion.Recipes;
 
     /// <summary>
     /// Class with extension methods for building a Uri using a fluent grammar.
@@ -26,8 +26,8 @@ namespace Naos.FluentUri
         /// <returns>New Uri with adjustments to the url.</returns>
         public static Uri AppendPathSegment(this Uri uri, string pathSegment)
         {
-            new { uri }.Must().NotBeNull();
-            new { pathSegment }.Must().NotBeNull();
+            new { uri }.AsArg().Must().NotBeNull();
+            new { pathSegment }.AsArg().Must().NotBeNull();
 
             var uriBuilder = new UriBuilder(uri);
 
@@ -51,8 +51,8 @@ namespace Naos.FluentUri
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Param", Justification = "Spelling/name is correct.")]
         public static Uri AppendQueryStringParam(this Uri uri, string name, string value)
         {
-            new { uri }.Must().NotBeNull();
-            new { value }.Must().NotBeNull();
+            new { uri }.AsArg().Must().NotBeNull();
+            new { value }.AsArg().Must().NotBeNull();
 
             var list = new KeyValuePair<string, string>(name, value).ToSingleElementArray();
             return uri.AppendQueryStringParams(list);
@@ -67,8 +67,8 @@ namespace Naos.FluentUri
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Params", Justification = "Spelling/name is correct.")]
         public static Uri AppendQueryStringParams(this Uri uri, IDictionary<string, string> queryStringParams)
         {
-            new { uri }.Must().NotBeNull();
-            new { queryStringParams }.Must().NotBeNull();
+            new { uri }.AsArg().Must().NotBeNull();
+            new { queryStringParams }.AsArg().Must().NotBeNull();
 
             var list = queryStringParams.ToList();
             return uri.AppendQueryStringParams(list);
@@ -83,8 +83,8 @@ namespace Naos.FluentUri
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Params", Justification = "Spelling/name is correct.")]
         public static Uri AppendQueryStringParams(this Uri uri, ICollection<KeyValuePair<string, string>> queryStringParams)
         {
-            new { uri }.Must().NotBeNull();
-            new { queryStringParams }.Must().NotBeNull();
+            new { uri }.AsArg().Must().NotBeNull();
+            new { queryStringParams }.AsArg().Must().NotBeNull();
 
             var collection = HttpUtility.ParseQueryString(uri.Query);
 
