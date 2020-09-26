@@ -9,29 +9,28 @@
 
 namespace OBeautifulCode.Assertion.Recipes
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Text.RegularExpressions;
+    using global::System;
+    using global::System.Collections;
+    using global::System.Collections.Generic;
+    using global::System.Globalization;
+    using global::System.Linq;
+    using global::System.Text.RegularExpressions;
 
     using OBeautifulCode.Type.Recipes;
 
-    using static System.FormattableString;
+    using static global::System.FormattableString;
 
     /// <summary>
     /// Contains all verifications that can be applied to an <see cref="AssertionTracker"/>.
     /// </summary>
-#if !OBeautifulCodeAssertionRecipesProject
-    [System.Diagnostics.DebuggerStepThrough]
+#if !OBeautifulCodeAssertionSolution
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     [System.CodeDom.Compiler.GeneratedCode("OBeautifulCode.Assertion.Recipes", "See package version number")]
     internal
 #else
     public
 #endif
-        static partial class Verifications
+    static partial class Verifications
     {
         /// <summary>
         /// Verifies that the reference type or nullable subject is null.

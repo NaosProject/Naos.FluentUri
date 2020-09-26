@@ -12,15 +12,14 @@ namespace OBeautifulCode.Assertion.Recipes
     /// <summary>
     /// Some delegates.
     /// </summary>
-#if !OBeautifulCodeAssertionRecipesProject
-    [System.Diagnostics.DebuggerStepThrough]
+#if !OBeautifulCodeAssertionSolution
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     [System.CodeDom.Compiler.GeneratedCode("OBeautifulCode.Assertion.Recipes", "See package version number")]
     internal
 #else
     public
 #endif
-        static class Delegates
+    static class Delegates
     {
         /// <summary>
         /// Executes a <see cref="Verification"/>.

@@ -9,9 +9,9 @@
 
 namespace OBeautifulCode.Equality.Recipes
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
+    using global::System.Collections.Generic;
+    using global::System.Linq;
+    using global::System.Reflection;
 
     using OBeautifulCode.Type.Recipes;
 
@@ -28,7 +28,7 @@ namespace OBeautifulCode.Equality.Recipes
     /// </code>
     /// </example>
     /// </remarks>
-#if !OBeautifulCodeEqualityRecipesProject
+#if !OBeautifulCodeEqualitySolution
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     [System.CodeDom.Compiler.GeneratedCode("OBeautifulCode.Equality.Recipes", "See package version number")]
     internal
@@ -122,6 +122,10 @@ namespace OBeautifulCode.Equality.Recipes
                     var genericArguments = valueType.GetElementType();
 
                     result = (HashCodeHelper)HashOrderedCollectionMethodInfo.MakeGenericMethod(genericArguments).Invoke(this, new[] { (object)item });
+                }
+                else if (valueType.IsClosedSystemEnumerableType())
+                {
+                    result = (HashCodeHelper)HashUnorderedCollectionMethodInfo.MakeGenericMethod(valueType.GenericTypeArguments).Invoke(this, new[] { (object)item });
                 }
                 else
                 {

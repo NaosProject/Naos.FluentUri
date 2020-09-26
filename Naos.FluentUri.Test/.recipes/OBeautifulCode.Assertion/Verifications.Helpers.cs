@@ -9,24 +9,24 @@
 
 namespace OBeautifulCode.Assertion.Recipes
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-    using System.Linq;
-    using System.Reflection;
+    using global::System;
+    using global::System.Collections;
+    using global::System.Collections.Concurrent;
+    using global::System.Collections.Generic;
+    using global::System.Diagnostics.CodeAnalysis;
+    using global::System.Globalization;
+    using global::System.Linq;
+    using global::System.Reflection;
 
     using OBeautifulCode.Equality.Recipes;
 
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "A generalized assertion library is going to require lots of types.")]
-#if !OBeautifulCodeAssertionRecipesProject
+#if !OBeautifulCodeAssertionSolution
     internal
 #else
     public
 #endif
-        static partial class Verifications
+    static partial class Verifications
     {
         private static readonly MethodInfo GetDefaultValueOpenGenericMethodInfo = ((Func<object>)GetDefaultValue<object>).Method.GetGenericMethodDefinition();
 

@@ -9,16 +9,16 @@
 
 namespace OBeautifulCode.Assertion.Recipes
 {
-    using System.Collections;
+    using global::System.Collections;
 
-    using static System.FormattableString;
+    using static global::System.FormattableString;
 
-#if !OBeautifulCodeAssertionRecipesProject
+#if !OBeautifulCodeAssertionSolution
     internal
 #else
     public
 #endif
-        static partial class Verifications
+    static partial class Verifications
     {
 #pragma warning disable 1591
 #pragma warning disable SA1600

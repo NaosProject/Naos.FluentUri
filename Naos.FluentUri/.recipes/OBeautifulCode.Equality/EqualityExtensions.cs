@@ -9,16 +9,16 @@
 
 namespace OBeautifulCode.Equality.Recipes
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-    using System.Linq;
+    using global::System.Collections.Generic;
+    using global::System.Diagnostics.CodeAnalysis;
+    using global::System.Linq;
+
+    using OBeautifulCode.CodeAnalysis.Recipes;
 
     /// <summary>
     /// Extension methods that test for equality between two objects.
     /// </summary>
-#if !OBeautifulCodeEqualityRecipesProject
+#if !OBeautifulCodeEqualitySolution
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     [System.CodeDom.Compiler.GeneratedCode("OBeautifulCode.Equality.Recipes", "See package version number")]
     internal
@@ -326,7 +326,7 @@ namespace OBeautifulCode.Equality.Recipes
         /// - true if the two sequences both contain the same number of elements for each unique element.
         /// - otherwise, false.
         /// </returns>
-        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "This is not excessively complex.")]
+        [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = ObcSuppressBecause.CA1502_AvoidExcessiveComplexity_DisagreeWithAssessment)]
         public static bool IsUnorderedEqualTo<TElement>(
             this IEnumerable<TElement> item1,
             IEnumerable<TElement> item2,

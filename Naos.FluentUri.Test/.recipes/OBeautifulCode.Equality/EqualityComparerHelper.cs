@@ -9,22 +9,22 @@
 
 namespace OBeautifulCode.Equality.Recipes
 {
-    using System;
-    using System.Collections.Generic;
+    using global::System;
+    using global::System.Collections.Generic;
 
     using OBeautifulCode.Type.Recipes;
 
     /// <summary>
     /// Helper methods related to <see cref="IEqualityComparer{T}"/>.
     /// </summary>
-#if !OBeautifulCodeEqualityRecipesProject
+#if !OBeautifulCodeEqualitySolution
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     [System.CodeDom.Compiler.GeneratedCode("OBeautifulCode.Equality.Recipes", "See package version number")]
     internal
 #else
     public
 #endif
-        static class EqualityComparerHelper
+    static class EqualityComparerHelper
     {
         /// <summary>
         /// Gets the equality comparer to use for the specified type.
@@ -71,6 +71,13 @@ namespace OBeautifulCode.Equality.Recipes
 
                 // ReSharper disable once PossibleNullReferenceException
                 result = (IEqualityComparer<T>)constructorInfo.Invoke(new object[] { enumerableEqualityComparerStrategy });
+            }
+            else if (type.IsClosedSystemEnumerableType())
+            {
+                var constructorInfo = typeof(EnumerableEqualityComparer<>).MakeGenericType(type.GenericTypeArguments).GetConstructor(new[] { typeof(EnumerableEqualityComparerStrategy) });
+
+                // ReSharper disable once PossibleNullReferenceException
+                result = (IEqualityComparer<T>)constructorInfo.Invoke(new object[] { EnumerableEqualityComparerStrategy.UnorderedEqual });
             }
             else if (type == typeof(DateTime))
             {

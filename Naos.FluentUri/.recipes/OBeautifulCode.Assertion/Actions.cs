@@ -9,16 +9,16 @@
 
 namespace OBeautifulCode.Assertion.Recipes
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
+    using global::System;
+    using global::System.Diagnostics.CodeAnalysis;
 
-    using OBeautifulCode.Assertion.Recipes.Internal;
+    using OBeautifulCode.CodeAnalysis.Recipes;
 
     /// <summary>
     /// The actions that have been performed in the lifecycle of an assertion.
     /// </summary>
     [Flags]
-#if !OBeautifulCodeAssertionRecipesProject
+#if !OBeautifulCodeAssertionSolution
     [System.CodeDom.Compiler.GeneratedCode("OBeautifulCode.Assertion.Recipes", "See package version number")]
     internal
 #else

@@ -9,23 +9,23 @@
 
 namespace OBeautifulCode.Assertion.Recipes
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-    using System.Linq;
-    using System.Text.RegularExpressions;
+    using global::System;
+    using global::System.Collections;
+    using global::System.Collections.Generic;
+    using global::System.Diagnostics.CodeAnalysis;
+    using global::System.Globalization;
+    using global::System.Linq;
+    using global::System.Text.RegularExpressions;
 
     using OBeautifulCode.Type.Recipes;
 
     [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "A generalized assertion library is going to require lots of types.")]
-#if !OBeautifulCodeAssertionRecipesProject
+#if !OBeautifulCodeAssertionSolution
     internal
 #else
     public
 #endif
-        static partial class Verifications
+    static partial class Verifications
     {
         private static void BeNullInternal(
             AssertionTracker assertionTracker,

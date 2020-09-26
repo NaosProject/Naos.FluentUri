@@ -12,13 +12,13 @@ namespace OBeautifulCode.Assertion.Recipes
     /// <summary>
     /// Determines how to apply the optional, user-specified rationale for a verification.
     /// </summary>
-#if !OBeautifulCodeAssertionRecipesProject
+#if !OBeautifulCodeAssertionSolution
     [System.CodeDom.Compiler.GeneratedCode("OBeautifulCode.Assertion.Recipes", "See package version number")]
     internal
 #else
     public
 #endif
-        enum ApplyBecause
+    enum ApplyBecause
     {
         /// <summary>
         /// Apply the rationale prefixed to the default exception message.
